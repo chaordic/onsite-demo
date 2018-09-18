@@ -3,15 +3,15 @@
 }
 
 .slick-prev:before {
-  color: #007bff;
+  color: purple;
 }
 
 .slick-next:before {
-  color: #007bff;
+  color: purple;
 }
 
-.carousel {
-  height: 400px;
+.slick-slide {
+  outline: none
 }
 
 .slick-slide {
@@ -21,6 +21,16 @@
 
 .slick-list {
   margin: 0 -10px
+}
+
+.carousel {
+  height: 450px;
+}
+
+.product-slide:hover {
+  padding-top: auto;
+  padding-bottom: auto;
+  box-shadow: 0px 0px 55px -10px rgba(0,0,0,0.14);
 }
 
 pre {
@@ -52,8 +62,4 @@ pre {
 .json-file {
   height: 800px;
   background-color: #f9f9f8;
-}
-
-.hided {
-  visibility: hidden;
 }

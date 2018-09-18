@@ -4,7 +4,7 @@ export default {
     recommendationUrl: '/pages/recommendations',
   },
   html: {
-    widgetsContainer: 'container-widget',
+    demoContainer: 'container-demo',
     jsonContainer: 'container-json',
     carouselContainer: 'carousel',
   },

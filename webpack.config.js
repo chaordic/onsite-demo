@@ -13,7 +13,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       title: 'Onsite-demo',
-      template: 'src/index.html',
+      template: '!!ejs-webpack-loader!app/layout/index.ejs',
     }),
     new webpack.HotModuleReplacementPlugin(),
   ],
@@ -34,9 +34,18 @@ module.exports = {
             loader: 'css-loader',
           },
           {
-            loader: 'fast-sass-loader',            
+            loader: 'fast-sass-loader',
           },
         ],
+      },
+      {
+        test: /\.ejs$/,
+        use: [{
+          loader: 'html-loader',
+          options: {
+            minimize: true,
+          },
+        }],
       },
       {
         enforce: 'pre',

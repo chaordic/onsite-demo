@@ -1,0 +1,17 @@
+<h3><b><%= field %></b></h3>
+<hr class="my-4">
+
+<% 
+  let widget;
+  Object.keys(response[field]).forEach((index) => {
+    widget = response[field][index];
+%>
+    <h4>
+      <b>Tipo de vitrine: </b> <%= widget.feature %>
+    </h4>
+    <div class="carousel" id="<%= widget.id %>">
+      <%- ejsInclude('product', { widget }); %>
+    </div>
+<%
+ });
+%>

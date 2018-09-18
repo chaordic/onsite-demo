@@ -1,9 +1,11 @@
-import { PageClient, WidgetClient } from './manager';
-import config from './config';
-import './style.scss';
+import { PageClient } from './managers/recommendations';
+import { WidgetClient } from './managers/widget';
+import { EventsClient } from './managers/events';
+import config from './config/config';
+import '../app/styles/style.scss';
 
 async function applyEventRequestApi() {
-  $(`#${config.html.widgetsContainer}`).addClass('hided');
+  $(`#${config.html.demoContainer}`).addClass('d-none');
   try {
     const response = await PageClient.getRecommendations(
       ['apiKey', 'secretKey', 'name', 'source', 'deviceId'].reduce((obj, key) => {
@@ -11,19 +13,19 @@ async function applyEventRequestApi() {
         return obj;
       }, {})
     );
-
-    WidgetClient.render(response);
+    WidgetClient.load(response);
   } catch (e) {
-    alert(e);
+    console.log(e);
   }
 }
 
 function listenEventRequestApi() {
-  $('#try_btn').click(applyEventRequestApi());
+  $('#try_btn').click(applyEventRequestApi);
 }
 
 const demoApp = {
-  async init() {
+  init() {
+    EventsClient.trackClicks();
     listenEventRequestApi();
   },
 };
