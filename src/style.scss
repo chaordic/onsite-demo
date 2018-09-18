@@ -1,0 +1,59 @@
+.body { 
+  font-family: 'Roboto', sans-serif;
+}
+
+.slick-prev:before {
+  color: #007bff;
+}
+
+.slick-next:before {
+  color: #007bff;
+}
+
+.carousel {
+  height: 400px;
+}
+
+.slick-slide {
+  margin: 0 10px;
+  padding: 5px;
+}
+
+.slick-list {
+  margin: 0 -10px
+}
+
+pre {
+  outline: 1px solid #ccc; 
+  padding: 5px; 
+  margin: 5px; 
+}
+
+.string { 
+  color: green; 
+}
+
+.number { 
+  color: darkorange; 
+}
+
+.boolean { 
+  color: blue; 
+}
+
+.null { 
+  color: magenta; 
+}
+
+.key { 
+  color: red; 
+}
+
+.json-file {
+  height: 800px;
+  background-color: #f9f9f8;
+}
+
+.hided {
+  visibility: hidden;
+}
