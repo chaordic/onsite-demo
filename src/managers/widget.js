@@ -1,5 +1,5 @@
 import ejs from 'ejs/ejs';
-import config from '../config/config';
+import config from '../config';
 import {
   slickRender,
   syntaxHighlight,

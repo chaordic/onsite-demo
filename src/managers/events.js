@@ -65,10 +65,8 @@ export const EventsClient = {
 
     if (cookie) {
       arr = JSON.parse(cookie);
-      arr.forEach((urlClick) => {
-        ajax({
-          url: urlClick,
-        });
+      arr.forEach((url) => {
+        ajax({ url });
       });
       deleteCookie('trackingUrl');
     }

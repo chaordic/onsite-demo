@@ -1,7 +1,7 @@
 import { PageClient } from './managers/recommendations';
 import { WidgetClient } from './managers/widget';
 import { EventsClient } from './managers/events';
-import config from './config/config';
+import config from './config';
 import '../app/styles/style.scss';
 
 async function applyEventRequestApi() {

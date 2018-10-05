@@ -1,5 +1,5 @@
 import { ajax } from '@linx-impulse/commons-js/http/ajax';
-import config from '../config/config';
+import config from '../config';
 
 function formattedTags(tags) {
   return (tags || []).map(tag => (tag.id || tag.name));

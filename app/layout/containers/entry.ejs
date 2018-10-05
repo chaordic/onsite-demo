@@ -1,57 +1,47 @@
 <div class="container mt-4">
-  <div class="jumbotron mb-5 p-3 font-weight-bold">
-    <h1 class="text-center mb-3">Try onsite-demo</h1>
+  <div class="jumbotron mb-5 p-3">
+    <h1 class="text-center mb-3 font-weight-bold pl-0">Try onsite-demo</h1>
     <hr class="my-4">
     <form class="form-horizontal" method="post">
-    <div class="row justify-content-md-center">
-      <div class="form-group required">
-      <label for="apiKey" class="control-label col-md-4  requiredField">
-         ApiKey<a class="text-danger">*</a>
-      </label>
-      <div class="controls col-lg-12 ">
-        <input class="input-md  textinput form-control" id="apiKey" maxlength="60" type="text" />
+      <div class="row justify-content-md-center">
+        <div class="form-group m-2">
+          <label for="apiKey" class="text-left col-md-4 font-weight-bold pl-0">
+            ApiKey<span class="text-danger">*</span>
+          </label>
+          <input class="input-md textinput form-control" id="apiKey" type="text" />
+        </div>
+        <div class="form-group m-2">
+          <label for="secretKey" class="text-left col-md-4 font-weight-bold pl-0">
+            SecretKey<span class="text-danger">*</span>
+          </label>
+          <input class="input-md textinput form-control" id="secretKey" type="text" />
+        </div>
+        <div class="form-group m-2">
+          <label for="name" class="text-left col-md-4 font-weight-bold pl-0">
+            Name<span class="text-danger">*</span>
+          </label>
+          <input class="input-md textinput form-control" id="name" type="text" />
+        </div>
       </div>
+      <div class="row justify-content-md-center">
+        <div class="form-group m-2">
+          <label for="source" class="text-left col-md-4 font-weight-bold pl-0">
+            Source<span class="text-danger">*</span>
+          </label>
+          <input class="input-md textinput form-control" id="source" type="text" />
+        </div>
+        <div class="form-group m-2">
+          <label for="deviceId" class="text-left col-md-4 font-weight-bold pl-0">
+            DeviceId<span class="text-danger">*</span>
+          </label>
+          <input class="input-md textinput form-control" id="deviceId" type="text" />
+        </div>
       </div>
-      <div class="form-group required">
-      <label for="secretKey" class="control-label col-md-4  requiredField">
-         SecretKey<a class="text-danger">*</a>
-      </label>
-      <div class="controls col-lg-12 ">
-        <input class="input-md  textinput form-control" id="secretKey" maxlength="60" type="text" />
+      <div class="row justify-content-md-center mt-2">
+        <div class="col-md-auto">
+          <button id="try_btn" type="button" class="btn btn-primary">Try it</button>
+        </div>
       </div>
-      </div>
-      <div class="form-group required">
-      <label for="name" class="control-label col-md-4  requiredField">
-         Name<a class="text-danger">*</a>
-      </label>
-      <div class="controls col-lg-12 ">
-        <input class="input-md  textinput form-control" id="name" maxlength="60" type="text" />
-      </div>
-      </div>
-    </div>
-    <div class="row justify-content-md-center">
-      <div class="form-group required">
-      <label for="source" class="control-label col-md-4  requiredField">
-         Source<a class="text-danger">*</a>
-      </label>
-      <div class="controls col-lg-12 ">
-        <input class="input-md  textinput form-control" id="source" maxlength="60" type="text" />
-      </div>
-      </div>
-      <div class="form-group required">
-      <label for="deviceId" class="control-label col-md-4  requiredField">
-         DeviceId<a class="text-danger">*</a>
-      </label>
-      <div class="controls col-lg-12 ">
-        <input class="input-md  textinput form-control" id="deviceId" maxlength="60" type="text" />
-      </div>
-      </div>
-    </div>
-    <div class="row justify-content-md-center mt-2">
-      <div class="col-md-auto">
-        <button id="try_btn" type="button" class="btn btn-primary">Try it</button>
-      </div>
-    </div>
     </form>
   </div>
 </div>
