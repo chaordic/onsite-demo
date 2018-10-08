@@ -2,13 +2,23 @@ import { parse } from '@linx-impulse/commons-js/query-string/parse';
 import config from './config';
 
 export function owlRender() {
-  $('.owl-carousel').owlCarousel({
+  $('.owl-4').owlCarousel({
     items: 4,
     loop: false,
     dots: false,
     lazyLoad: true,
     nav: true,
     slideBy: 4,
+    rewind: true,
+  });
+
+  $('.owl-3').owlCarousel({
+    items: 3,
+    loop: false,
+    dots: false,
+    lazyLoad: true,
+    nav: true,
+    slideBy: 3,
     rewind: true,
   });
 }

@@ -7,12 +7,21 @@ import {
 } from './utils';
 import './styles/style.scss';
 import { Widget } from './components/widget';
+import { ReferenceWidget } from './components/referenceWidget';
 
 function renderWidget(widget, field) {
-  // Injecting html of the widget
-  $(`.${field}`).append(Widget.render(widget));
-  // Set the tracking of events.
-  Widget.listenEvents(widget);
+  const referenceWidgets = ['ViewPersonalized', 'PurchasePersonalized', 'CartPersonalized', 'UltimateBuy', 'Wishlist'];
+
+  if (referenceWidgets.indexOf(widget.feature) !== -1) {
+    $(`.${field}`).append(ReferenceWidget.render(widget));
+    // ReferenceWidget.listenEvents(widget);
+  } else {
+    // Injecting html of the widget
+    $(`.${field}`).append(Widget.render(widget));
+
+    // Set the tracking of events.
+    Widget.listenEvents(widget);
+  }
 }
 
 /**

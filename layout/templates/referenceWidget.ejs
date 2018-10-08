@@ -1,0 +1,52 @@
+<h4>
+  <span class="font-weight-bold">Tipo de vitrine: </span> <%= widget.feature %>
+</h4>
+
+<div class="row container-widget">  
+  <% 
+    const reference = widget.displays[0].references[0];
+  %>
+
+  <div class="reference-card border-right p-3 w-25 position-relative">
+    <button class="octicon octicon-sync btn-refresh btn rounded btn-primary p-1 position-absolute"></button>
+    <a href="<%= reference.url %>">
+      <div class="img-wrapper">
+        <img src="https://<%= reference.images.default %>" class="rounded">
+      </div>
+      <div class="content px-3 mt-3">
+        <span><%= reference.name %></span>
+      </div>
+      <div class="price px-3">
+        <span class="font-weight-bold">R$ <%= reference.price %></span>
+      </div>
+    </a>
+  </div>
+
+  <div class="owl-carousel owl-3 owl-theme w-75" id="<%= widget.id %>">
+    <%
+      const recs = widget.displays[0].recommendations;
+      let product;
+      /**
+       * Iterating trough the recommendations and adding html for each product.
+       */
+      Object.keys(recs).forEach((index) => {
+        product = recs[index];
+    %>
+        <div id="<%= product.id %>" class="my-3 rounded">
+          <a href="<%= reference.url %>">
+            <div class="img-wrapper">
+              <img src="https://<%= product.images.default %>" class="rounded">
+            </div>
+            <div class="content px-3 mt-3">
+              <span><%= product.name %></span>
+            </div>
+            <div class="price px-3">
+              <span class="font-weight-bold">R$ <%= product.price %></span>
+            </div>
+          </a>
+        </div>
+    <%
+      });
+    %>
+  </div>
+</div>

@@ -11,11 +11,12 @@ $linx-color: #682c69;
   font-family: 'Roboto', sans-serif;
 }
 
-// Owl-carousel
+.linx-text {
+  color: $linx-color;
+}
 
-.owl-carousel .owl-item img {
-  width: auto;
-  max-width: 80%;
+.container-widget {
+  max-height: 25em;
 }
 
 //modifying default CSS from owl
@@ -37,12 +38,42 @@ $linx-color: #682c69;
   text-decoration: none; 
 }
 
+// Adjusting arrows to sides.
+.owl-prev {
+  width: 2em;
+  height: 2em;
+  position: absolute;
+  top: 43%;
+  left: 0.5em;
+  display: block !important;
+}
+
+.owl-next {
+  width: 2em;
+  height: 2em;
+  position: absolute;
+  top: 43%;
+  right: 0.5em;
+  display: block !important;
+}
+
+.btn-refresh {
+  top: 1em;
+  right: 1em;
+  width: 1.7em;
+  height: 1.7em;
+}
+
 // Card
+.owl-carousel .owl-item img {
+  width: auto;
+}
 
 .img-wrapper img {
-  max-width: 100%;
-  max-height: 100%;
+  max-height: 13em;
+  width: auto;
   margin: auto;
+  display: block;
 }
 
 .content {
@@ -58,8 +89,7 @@ $linx-color: #682c69;
   box-sizing: content-box;
 }
 
-// Json styling
-
+// Json
 .string { 
   color: #008000; 
 }
