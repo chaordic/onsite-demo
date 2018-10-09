@@ -13,7 +13,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       title: 'Onsite-demo',
-      template: '!!ejs-webpack-loader!app/layout/index.ejs',
+      template: 'layout/index.html',
     }),
     new webpack.HotModuleReplacementPlugin(),
   ],

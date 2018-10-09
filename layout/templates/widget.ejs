@@ -1,0 +1,25 @@
+<h4>
+  <b>Tipo de vitrine: </b> <%= widget.feature %>
+</h4>
+<div class="carousel" id="<%= widget.id %>">
+  <%
+    const recs = widget.displays[0].recommendations;
+    let product;
+
+    /*
+    ** Iterating trough the recommendations and 
+    ** adding html for each product.
+    */
+    Object.keys(recs).forEach((index) => {
+    product = recs[index];
+  %>
+      <div id="<%= product.id %>" class="row justify-content-center product-slide pt-4">
+        <img src="https://<%= product.images.default %>" class="rounded mx-auto d-block">
+        <div class="m-1"><%= product.name %></div>
+        <div class="m-1 font-weight-bold"><%= product.price %></div>
+      </div>
+  <%
+    });
+  %>
+  
+</div>

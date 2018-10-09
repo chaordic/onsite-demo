@@ -1,5 +1,4 @@
-import ejs from 'ejs/ejs';
-import templateProduct from '../../app/layout/templates/product.ejs';
+import config from './config';
 
 export function slickRender() {
   $('.carousel').slick({
@@ -43,13 +42,9 @@ export function replacer(key, value) {
   return (typeof value === 'number') ? undefined : value;
 }
 
-const ejsIncludeData = {
-  product: templateProduct,
-};
-
-const ejsInclude = (path, data = {}) => {
-  const template = ejsIncludeData[path] || '';
-  return ejs.render(template, data);
-};
-
-global.ejsInclude = ejsInclude;
+export function jsonRender(response) {
+  $(`#${config.html.jsonContainer}`).empty();
+  $(`#${config.html.jsonContainer}`).append(`
+    ${syntaxHighlight(JSON.stringify(response, replacer, 4))}
+  `);
+}
