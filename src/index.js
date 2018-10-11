@@ -10,15 +10,22 @@ import { Widget } from './components/widget';
 import { ReferenceWidget } from './components/referenceWidget';
 
 function renderWidget(widget, field) {
-  const referenceWidgets = ['ViewPersonalized', 'PurchasePersonalized', 'CartPersonalized', 'UltimateBuy', 'Wishlist'];
-
+  const referenceWidgets = [
+    'ViewPersonalized',
+    'PurchasePersonalized',
+    'CartPersonalized',
+    'UltimateBuy',
+    'Wishlist',
+  ];
   if (referenceWidgets.indexOf(widget.feature) !== -1) {
     $(`.${field}`).append(ReferenceWidget.render(widget));
+    $(`#${widget.id}-refresh`).mousedown(async () => {
+      ReferenceWidget.refreshWidget(widget, owlRender);
+    });
     // ReferenceWidget.listenEvents(widget);
   } else {
     // Injecting html of the widget
     $(`.${field}`).append(Widget.render(widget));
-
     // Set the tracking of events.
     Widget.listenEvents(widget);
   }
@@ -65,7 +72,6 @@ async function applyEventRequestApi(callback) {
         return obj;
       }, {})
     );
-
     // Rendering slots and widgets from the response.
     renderPage(response);
     // Rendering carousels with owl-carousel plugin.

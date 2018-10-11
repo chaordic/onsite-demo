@@ -1,27 +1,41 @@
 import { parse } from '@linx-impulse/commons-js/query-string/parse';
+import ejs from 'ejs/ejs';
 import config from './config';
+import templateProduct from '../layout/templates/components/products.ejs';
+import templateReference from '../layout/templates/components/reference.ejs';
 
 export function owlRender() {
-  $('.owl-4').owlCarousel({
-    items: 4,
-    loop: false,
-    dots: false,
-    lazyLoad: true,
-    nav: true,
-    slideBy: 4,
-    rewind: true,
-  });
+  $('.owl-carousel').each((index, element) => {
+    if (!$(element).hasClass('owl-loaded')) {
+      let quantity;
+      if ($(element).hasClass('owl-3')) {
+        quantity = 3;
+      } else {
+        quantity = 4;
+      }
 
-  $('.owl-3').owlCarousel({
-    items: 3,
-    loop: false,
-    dots: false,
-    lazyLoad: true,
-    nav: true,
-    slideBy: 3,
-    rewind: true,
+      $(element).owlCarousel({
+        items: quantity,
+        slideBy: quantity,
+        loop: false,
+        dots: false,
+        lazyLoad: true,
+        nav: true,
+        rewind: true,
+      });
+    }
   });
 }
+
+const ejsHelper = {
+  './components/product.ejs': templateProduct,
+  './components/reference.ejs': templateReference,
+};
+
+global.ejsInject = (path, widget) => {
+  const template = ejs.render(ejsHelper[path], { widget });
+  return template;
+};
 
 export function urlParams() {
   const url = window.location.href;

@@ -1,0 +1,25 @@
+<%
+  const recs = widget.displays[0].recommendations;
+  let product;
+  /**
+    * Iterating trough the recommendations and adding html for each product.
+    */
+  Object.keys(recs).forEach((index) => {
+    product = recs[index];
+%>
+    <div id="<%= product.id %>" class="my-3 rounded">
+      <a href="<%= product.url %>">
+        <div class="img-wrapper">
+          <img src="https://<%= product.images.default %>" class="rounded">
+        </div>
+        <div class="content px-3 mt-3">
+          <span><%= product.name %></span>
+        </div>
+        <div class="price px-3">
+          <span class="font-weight-bold">R$ <%= product.price %></span>
+        </div>
+      </a>
+    </div>
+<%
+  });
+%>

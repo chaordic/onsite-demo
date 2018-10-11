@@ -16,7 +16,7 @@ $linx-color: #682c69;
 }
 
 .container-widget {
-  max-height: 25em;
+  height: 20em;
 }
 
 //modifying default CSS from owl
@@ -40,8 +40,6 @@ $linx-color: #682c69;
 
 // Adjusting arrows to sides.
 .owl-prev {
-  width: 2em;
-  height: 2em;
   position: absolute;
   top: 43%;
   left: 0.5em;
@@ -49,12 +47,14 @@ $linx-color: #682c69;
 }
 
 .owl-next {
-  width: 2em;
-  height: 2em;
   position: absolute;
   top: 43%;
   right: 0.5em;
   display: block !important;
+}
+
+.owl-theme .owl-nav span {
+  font-size: 1.8em;
 }
 
 .btn-refresh {
@@ -64,13 +64,18 @@ $linx-color: #682c69;
   height: 1.7em;
 }
 
+.owl-carousel {
+  display: block;
+  overflow: hidden;
+}
+
 // Card
 .owl-carousel .owl-item img {
   width: auto;
 }
 
 .img-wrapper img {
-  max-height: 13em;
+  max-height: 12em;
   width: auto;
   margin: auto;
   display: block;

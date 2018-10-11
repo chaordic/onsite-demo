@@ -1,0 +1,13 @@
+<% const reference = widget.displays[0].references[0]; %>
+
+<a href="<%= reference.url %>">
+  <div class="img-wrapper">
+    <img src="https://<%= reference.images.default %>" class="rounded">
+  </div>
+  <div class="content px-3 mt-3">
+    <span><%= reference.name %></span>
+  </div>
+  <div class="price px-3">
+    <span class="font-weight-bold">R$ <%= reference.price %></span>
+  </div>
+</a>
