@@ -8,15 +8,17 @@ import './styles/style.scss';
 import { Widget } from './components/widget';
 
 function renderWidget(widget, field) {
+  // Injecting html of the widget
   $(`.${field}`).append(Widget.render(widget));
+  // Set the tracking of events.
   Widget.listenEvents(widget);
 }
 
-/*
-** Slot is a array of widgets.
-** Field is the name of the slots.
-** You can add more slots on the Onsite dashboard.
-** Default slot fields: Top, Middle, Bottom.
+/**
+ * Slot is a array of widgets.
+ * Field is the name of the slot.
+ * You can add more slots on the Onsite dashboard.
+ * Default slot fields: Top, Middle, Bottom.
 */
 function renderSlot(slot, field) {
   // Checking if the slot field exists.
@@ -30,11 +32,11 @@ function renderSlot(slot, field) {
   }
 }
 
-// Rendering slots and widgets from the response.
+/**
+ *  Rendering slots and widgets from the response.
+ */
 function renderPage(response) {
-  /*
-  ** Iterating through the API response and rendering each slot.
-  */
+  // Iterating through the API response and rendering each slot.
   Object.keys(response).forEach((field) => { renderSlot(response[field], field); });
 
   // Rendering carousels with Slick-carousel plugin.
@@ -50,10 +52,11 @@ function renderPage(response) {
 async function applyEventRequestApi() {
   // Hiding the container with the slots and widgets.
   $(`#${config.html.demoContainer}`).addClass('d-none');
-  /*
-  ** Requesting response from API based on the passed parameters.
-  ** You may fill the parameters based on your info.
-  */
+
+  /**
+   * Requesting response from API based on the passed parameters.
+   * You may fill the parameters based on your info.
+   */
   try {
     const response = await PageClient.getRecommendations(
       ['apiKey', 'secretKey', 'name', 'source', 'deviceId'].reduce((obj, key) => {
@@ -74,12 +77,12 @@ function listenEventRequestApi() {
 }
 
 const demoApp = {
-  /*
-  ** Start from the demo site.
-  ** Need to call trackClicks() to get the
-  ** tracking urls saved on the cookie and
-  ** make the ajax request.
-  */
+  /**
+   * Start from the demo site.
+   * Need to call trackClicks() to get the
+   * tracking urls saved on the cookie and
+   * make the ajax request.
+   */
   init() {
     Widget.trackClicks();
     listenEventRequestApi();
