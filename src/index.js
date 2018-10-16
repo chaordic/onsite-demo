@@ -17,12 +17,17 @@ function renderWidget(widget, field) {
     'UltimateBuy',
     'Wishlist',
   ];
+  // Checking witch type of widget to render.
   if (referenceWidgets.indexOf(widget.feature) !== -1) {
+    // Injecting html of the widget.
     $(`.${field}`).append(ReferenceWidget.render(widget));
+    // Set the tracking events of the widget
+    ReferenceWidget.listenEvents(widget);
+
     $(`#${widget.id}-refresh`).mousedown(async () => {
+      // Refreshing the widget with the new reference.
       ReferenceWidget.refreshWidget(widget, owlRender);
     });
-    // ReferenceWidget.listenEvents(widget);
   } else {
     // Injecting html of the widget
     $(`.${field}`).append(Widget.render(widget));
@@ -95,7 +100,7 @@ const demoApp = {
   init() {
     // Var containing the name of the cookie that saves products URLs.
     global.cookieProductUrls = 'trackingUrl';
-    // List of tracked widgets based on their ID.
+    // List of tracked widgets and refreshes.
     global.impressionWidget = [];
     Widget.trackClicks();
     // Check if the url have the insert parameters and add them to the inputs.
