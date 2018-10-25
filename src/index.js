@@ -35,12 +35,12 @@ function renderSlot(slot, field) {
 /**
  *  Rendering slots and widgets from the response.
  */
-function renderPage(response) {
+function renderPage(response, callback) {
   // Iterating through the API response and rendering each slot.
   Object.keys(response).forEach((field) => { renderSlot(response[field], field); });
 
   // Rendering carousels with Slick-carousel plugin.
-  setTimeout(slickRender, 0);
+  callback();
 
   // For demo purposes showing the Json response.
   jsonRender(response);
@@ -66,7 +66,7 @@ async function applyEventRequestApi() {
     );
 
     // Rendering slots and widgets from the response.
-    renderPage(response);
+    renderPage(response, slickRender);
   } catch (e) {
     console.log(e);
   }

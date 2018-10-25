@@ -3,11 +3,11 @@
 }
 
 .slick-prev:before {
-  color: purple;
+  color: #800080;
 }
 
 .slick-next:before {
-  color: purple;
+  color: #800080;
 }
 
 .slick-slide {
@@ -30,27 +30,27 @@
 .product-slide:hover {
   padding-top: auto;
   padding-bottom: auto;
-  box-shadow: 0px 0px 55px -10px rgba(0,0,0,0.14);
+  box-shadow: 0px 0px 55px -10px rgba(0, 0, 0, 0.14);
 }
 
 .string { 
-  color: green; 
+  color: #008000; 
 }
 
 .number { 
-  color: darkorange; 
+  color: #ff8c00; 
 }
 
 .boolean { 
-  color: blue; 
+  color: #0000ff; 
 }
 
 .null { 
-  color: magenta; 
+  color: #ff00ff; 
 }
 
 .key { 
-  color: red; 
+  color: #ff0000; 
 }
 
 .json-file {
