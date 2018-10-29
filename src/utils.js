@@ -2,10 +2,10 @@ import config from './config';
 
 export function slickRender() {
   $('.carousel').slick({
-    dots: false,
     infinite: true,
-    slidesToShow: 3,
-    slidesToScroll: 3,
+    slidesToShow: 5,
+    slidesToScroll: 5,
+    centerPadding: 0,
   });
 
   $('.product-slide')
@@ -15,8 +15,6 @@ export function slickRender() {
     .mouseout(() => {
       $('html,body').css('cursor', 'default');
     });
-
-  $('.slick-track').addClass('m-4');
 }
 
 export function syntaxHighlight(json) {

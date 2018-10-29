@@ -1,5 +1,5 @@
 <h4>
-  <b>Tipo de vitrine: </b> <%= widget.feature %>
+  <span class="font-weight-bold">Tipo de vitrine: </span> <%= widget.feature %>
 </h4>
 <div class="carousel" id="<%= widget.id %>">
   <%
@@ -12,10 +12,14 @@
     Object.keys(recs).forEach((index) => {
     product = recs[index];
   %>
-      <div id="<%= product.id %>" class="row justify-content-center product-slide pt-4">
-        <img src="https://<%= product.images.default %>" class="rounded mx-auto d-block">
-        <div class="m-1"><%= product.name %></div>
-        <div class="m-1 font-weight-bold"><%= product.price %></div>
+      <div id="<%= product.id %>" class="product-slide my-3 py-2 rounded">
+        <a href="<%= product.url %>"><img src="https://<%= product.images.default %>" class="img-fluid mx-auto d-block rounded"></a>
+        <div class="content mt-3 mx-2">
+          <a href="<%= product.url %>"><span><%= product.name %></span></a>
+        </div>
+        <div class="price my-1 mx-2">
+          <a href="<%= product.url %>"><span class="font-weight-bold">R$ <%= product.price %></span></a>
+        </div>
       </div>
   <%
     });
