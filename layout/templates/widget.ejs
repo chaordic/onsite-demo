@@ -1,7 +1,7 @@
 <h4>
   <span class="font-weight-bold">Tipo de vitrine: </span> <%= widget.feature %>
 </h4>
-<div class="carousel" id="<%= widget.id %>">
+<div class="owl-carousel owl-theme" id="<%= widget.id %>">
   <%
     const recs = widget.displays[0].recommendations;
     let product;
@@ -12,14 +12,14 @@
     Object.keys(recs).forEach((index) => {
     product = recs[index];
   %>
-      <div id="<%= product.id %>" class="product-slide my-3 rounded">
+      <div id="<%= product.id %>" class="my-3 rounded">
         <div class="img-wrapper">
           <img src="https://<%= product.images.default %>" class="rounded">
         </div>
-        <div class="content">
+        <div class="content px-3 mt-3">
           <a href="<%= product.url %>"><span><%= product.name %></span></a>
         </div>
-        <div class="price">
+        <div class="price px-3">
           <a href="<%= product.url %>"><span class="font-weight-bold">R$ <%= product.price %></span></a>
         </div>
       </div>

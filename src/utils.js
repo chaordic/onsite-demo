@@ -1,20 +1,15 @@
 import config from './config';
 
-export function slickRender() {
-  $('.carousel').slick({
-    infinite: true,
-    slidesToShow: 5,
-    slidesToScroll: 5,
-    centerPadding: 0,
+export function owlRender() {
+  $('.owl-carousel').owlCarousel({
+    items: 4,
+    loop: false,
+    dots: false,
+    lazyLoad: true,
+    nav: true,
+    slideBy: 4,
+    rewind: true,
   });
-
-  $('.product-slide')
-    .mouseover(() => {
-      $('html,body').css('cursor', 'pointer');
-    })
-    .mouseout(() => {
-      $('html,body').css('cursor', 'default');
-    });
 }
 
 export function syntaxHighlight(json) {

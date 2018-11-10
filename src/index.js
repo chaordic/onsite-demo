@@ -1,7 +1,7 @@
 import { PageClient } from './recommendations';
 import config from './config';
 import {
-  slickRender,
+  owlRender,
   jsonRender,
 } from './utils';
 import './styles/style.scss';
@@ -58,7 +58,7 @@ async function applyEventRequestApi(callback) {
 
     // Rendering slots and widgets from the response.
     renderPage(response);
-    // Rendering carousels with Slick-carousel plugin.
+    // Rendering carousels with owl-carousel plugin.
     callback();
   } catch (e) {
     console.log(e);
@@ -66,7 +66,7 @@ async function applyEventRequestApi(callback) {
 }
 
 function listenEventRequestApi() {
-  $('#try_btn').click(() => applyEventRequestApi(slickRender));
+  $('#try_btn').click(() => applyEventRequestApi(owlRender));
 }
 
 const demoApp = {

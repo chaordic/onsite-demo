@@ -6,6 +6,5 @@ export default {
   html: {
     demoContainer: 'container-demo',
     jsonContainer: 'container-json',
-    carouselContainer: 'carousel',
   },
 };
