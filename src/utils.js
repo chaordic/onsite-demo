@@ -1,3 +1,4 @@
+import { parse } from '@linx-impulse/commons-js/query-string/parse';
 import config from './config';
 
 export function owlRender() {
@@ -10,6 +11,18 @@ export function owlRender() {
     slideBy: 4,
     rewind: true,
   });
+}
+
+export function urlParams() {
+  const url = window.location.href;
+  const params = parse(url.split('?')[1]);
+
+  if (!params) {
+    return false;
+  }
+
+  Object.keys(params).forEach(key => $(`#${key}`).val(params[key]));
+  return true;
 }
 
 export function syntaxHighlight(json) {

@@ -3,6 +3,7 @@ import config from './config';
 import {
   owlRender,
   jsonRender,
+  urlParams,
 } from './utils';
 import './styles/style.scss';
 import { Widget } from './components/widget';
@@ -82,6 +83,11 @@ const demoApp = {
     // List of tracked widgets based on their ID.
     global.impressionWidget = [];
     Widget.trackClicks();
+    // Check if the url have the insert parameters and add them to the inputs.
+    if (urlParams()) {
+      applyEventRequestApi(owlRender);
+    }
+    // Listen to the interaction with the inputs.
     listenEventRequestApi();
   },
 };
