@@ -4,25 +4,53 @@ import config from './config';
 import templateProduct from '../layout/templates/components/products.ejs';
 import templateReference from '../layout/templates/components/reference.ejs';
 
+const toggleSelector = $('.switch');
+
+function getToggle() {
+  return toggleSelector.attr('toggle');
+}
+
+function setToggle(value) {
+  toggleSelector.attr('toggle', value);
+}
+
 export function owlRender() {
   $('.owl-carousel').each((index, element) => {
     if (!$(element).hasClass('owl-loaded')) {
-      let quantity;
+      let quantity = 4;
+      let toggle = false;
+
       if ($(element).hasClass('owl-3')) {
         quantity = 3;
-      } else {
+      } else if ($(element).hasClass('owl-4')) {
         quantity = 4;
+      }
+
+      if (getToggle() === 'true') {
+        toggle = true;
+      } else if (getToggle() === 'false') {
+        toggle = false;
       }
 
       $(element).owlCarousel({
         items: quantity,
         slideBy: quantity,
-        loop: false,
+        loop: true,
         dots: false,
         lazyLoad: true,
         nav: true,
-        rewind: true,
+        rewind: false,
+        autoplay: toggle,
+        smartSpeed: 400,
+        autoplayTimeout: 5000,
+        autoplayHoverPause: false,
       });
+
+      // Sync autoplay of caroulsels.
+      if (getToggle() === 'true') {
+        $('.owl-carousel').trigger('stop.owl.autoplay');
+        $('.owl-carousel').trigger('play.owl.autoplay');
+      }
     }
   });
 }
@@ -40,13 +68,23 @@ global.ejsInject = (path, widget) => {
 export function urlParams() {
   const url = window.location.href;
   const params = parse(url.split('?')[1]);
-
-  if (!params) {
+  if (Object.keys(params).length === 0) {
     return false;
   }
-
   Object.keys(params).forEach(key => $(`#${key}`).val(params[key]));
   return true;
+}
+
+export function listenToggleSwitch() {
+  toggleSelector.mousedown(() => {
+    if (getToggle() === 'false') {
+      setToggle('true');
+      $('.owl-carousel').trigger('play.owl.autoplay');
+    } else if (getToggle() === 'true') {
+      setToggle('false');
+      $('.owl-carousel').trigger('stop.owl.autoplay');
+    }
+  });
 }
 
 export function syntaxHighlight(json) {

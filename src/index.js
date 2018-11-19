@@ -1,9 +1,15 @@
+import {
+  setCookie,
+  getCookie,
+} from '@linx-impulse/commons-js/browser';
+import { stringify } from '@linx-impulse/commons-js/query-string/stringify';
 import { PageClient } from './recommendations';
 import config from './config';
 import {
   owlRender,
   jsonRender,
   urlParams,
+  listenToggleSwitch,
 } from './utils';
 import './styles/style.scss';
 import { Widget } from './components/widget';
@@ -71,16 +77,31 @@ async function applyEventRequestApi(callback) {
    * You may fill the parameters based on your info.
    */
   try {
-    const response = await PageClient.getRecommendations(
-      ['apiKey', 'secretKey', 'name', 'source', 'deviceId'].reduce((obj, key) => {
-        obj[key] = $(`#${key}`).val();
-        return obj;
-      }, {})
-    );
-    // Rendering slots and widgets from the response.
-    renderPage(response);
-    // Rendering carousels with owl-carousel plugin.
-    callback();
+    const labels = ['apiKey',
+      'secretKey',
+      'name',
+      'source',
+      'deviceId',
+      'productFormat',
+      'dummy',
+      'homologation',
+      'showOnlyAvailable',
+    ];
+    const inputs = labels.reduce((obj, key) => {
+      obj[key] = $(`#${key}`).val();
+      return obj;
+    }, {});
+    const response = await PageClient.getRecommendations(inputs);
+    if (getCookie('pageRendered') !== 'true') {
+      // Rendering slots and widgets from the response.
+      renderPage(response);
+      // Rendering carousels with owl-carousel plugin.
+      callback();
+      listenToggleSwitch();
+      setCookie('pageRendered', 'true');
+    } else {
+      window.location.assign(`${window.location.href.split('?')[0]}?${stringify(inputs)}`);
+    }
   } catch (e) {
     console.log(e);
   }
@@ -98,6 +119,7 @@ const demoApp = {
    * make the ajax request.
    */
   init() {
+    setCookie('pageRendered', 'false');
     // Var containing the name of the cookie that saves products URLs.
     global.cookieProductUrls = 'trackingUrl';
     // List of tracked widgets and refreshes.

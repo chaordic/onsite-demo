@@ -7,8 +7,8 @@
   Object.keys(recs).forEach((index) => {
     product = recs[index];
 %>
-    <div id="<%= product.id %>" class="my-3 rounded">
-      <a href="<%= product.url %>">
+    <div class="rounded">
+      <a id="<%= product.id %>" href="<%= product.url %>" target="_blank">
         <div class="img-wrapper">
           <img src="https://<%= product.images.default %>" class="rounded">
         </div>

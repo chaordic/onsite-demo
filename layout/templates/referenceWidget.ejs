@@ -2,13 +2,13 @@
   <span class="font-weight-bold">Tipo de vitrine: </span> <%= widget.feature %>
 </h4>
 
-<div id="<%= widget.id %>" class="row container-widget">  
+<div id="<%= widget.id %>" class="row container-widget my-2">  
   <div class="reference-card border-right p-3 w-25 position-relative">
     <button id="<%= widget.id %>-refresh" class="octicon octicon-sync btn-refresh btn rounded btn-primary p-1 position-absolute"></button>
     <%- ejsInject('./components/reference.ejs', widget); %>
   </div>
 
-  <div class="owl-carousel owl-3 owl-theme w-75" id="<%= widget.id %>">
+  <div class="owl-carousel owl-3 owl-theme w-75 py-3" id="<%= widget.id %>">
     <%- ejsInject('./components/product.ejs', widget); %>
   </div>
 </div>

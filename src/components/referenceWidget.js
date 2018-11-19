@@ -8,6 +8,7 @@ import {
 import templateReferenceWidget from '../../layout/templates/referenceWidget.ejs';
 import templateReference from '../../layout/templates/components/reference.ejs';
 import templateProducts from '../../layout/templates/components/products.ejs';
+import templateLoading from '../../layout/templates/components/loading.ejs';
 
 function getRefreshWidget(widget) {
   // Requesting new widget from API based on a new reference.
@@ -21,7 +22,7 @@ function getRefreshWidget(widget) {
 }
 
 function listenClicks(product) {
-  $(`#${product.id}`).find('a').mousedown(() => {
+  $(`#${product.id}`).mousedown(() => {
     /**
      * If product is clicked append on the cookie the trackUrl.
      * Remember to make the requests when page load in the next access.
@@ -32,7 +33,6 @@ function listenClicks(product) {
     if (cookie) {
       arr = JSON.parse(cookie);
     }
-
     arr.push(product.trackingUrl);
     setCookie(global.cookieProductUrls, JSON.stringify(arr));
   });
@@ -51,9 +51,10 @@ function isViewed(widget) {
   }
 }
 
-function listenImpression(widget) {
-  // If widget is viewed without scrolling when page load.
-  isViewed(widget);
+function listenImpression(widget, reload) {
+  if (reload === true) {
+    isViewed(widget);
+  }
   /**
    * Each time the user scrolls the page is checked
    * if there is any widget on his Viewport.
@@ -71,7 +72,6 @@ export const ReferenceWidget = {
   },
 
   async refreshWidget(widget, callback) {
-    const refreshedWidget = await getRefreshWidget(widget);
     const widgetDiv = $(`#${widget.id}`);
     const referenceDiv = widgetDiv.find('.reference-card');
     const productsDiv = widgetDiv.find('.owl-carousel');
@@ -80,8 +80,15 @@ export const ReferenceWidget = {
     productsDiv.find('.owl-stage-outer').children().unwrap();
     productsDiv.empty();
     productsDiv.addClass('owl-carousel');
-    referenceDiv.children('a').empty();
+    referenceDiv.children('a').remove();
 
+    referenceDiv.append(ejs.render(templateLoading));
+    productsDiv.append(ejs.render(templateLoading));
+
+    const refreshedWidget = await getRefreshWidget(widget);
+
+    productsDiv.empty();
+    referenceDiv.children('div').remove();
     referenceDiv.append(ejs.render(templateReference, { widget: refreshedWidget }));
     productsDiv.append(ejs.render(templateProducts, { widget: refreshedWidget }));
 
@@ -93,16 +100,16 @@ export const ReferenceWidget = {
     });
 
     callback();
-    this.listenEvents(refreshedWidget);
+    this.listenEvents(refreshedWidget, true);
   },
 
   /**
    * Function that iterates through all the widgets and products to activate
    * the tracking of widgets impression and products clicks.
    */
-  listenEvents(widget) {
+  listenEvents(widget, reload) {
     // Set the Widget Impression track listening.
-    listenImpression(widget);
+    listenImpression(widget, reload);
     // Set the Click track listening of the reference.
     const reference = widget.displays[0].references[0];
     listenClicks(reference);
