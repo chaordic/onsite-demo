@@ -82,10 +82,15 @@ async function applyEventRequestApi(callback) {
       'name',
       'source',
       'deviceId',
+      'productId',
+      'url',
+      'userId',
       'productFormat',
+      'salesChannel',
       'dummy',
       'homologation',
       'showOnlyAvailable',
+      'acceptEnconding',
     ];
     const inputs = labels.reduce((obj, key) => {
       obj[key] = $(`#${key}`).val();

@@ -65,6 +65,14 @@ global.ejsInject = (path, widget) => {
   return template;
 };
 
+global.formatUrl = (url) => {
+  let formatted = url;
+  if (formatted.indexOf('http') !== 0) {
+    formatted = (formatted.indexOf('//') === 0 ? '' : '//') + formatted;
+  }
+  return formatted;
+};
+
 export function urlParams() {
   const url = window.location.href;
   const params = parse(url.split('?')[1]);

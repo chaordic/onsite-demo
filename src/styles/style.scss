@@ -40,18 +40,18 @@ $linx-color: #682c69;
 }
 
 // Adjusting arrows to sides.
-.owl-prev {
+.owl-prev, .owl-next  {
   position: absolute;
   top: 43%;
-  left: 0.5em;
   display: block !important;
 }
 
+.owl-prev {
+  left: 0.5em;
+}
+
 .owl-next {
-  position: absolute;
-  top: 43%;
   right: 0.5em;
-  display: block !important;
 }
 
 .owl-theme .owl-nav span {
