@@ -47,14 +47,6 @@ function listenImpression(widget) {
 
 export const Widget = {
   /**
-   * Call the template of the widgets carousels
-   * and returning the html.
-   */
-  render(widget) {
-    return ejs.render(templateWidget, { widget });
-  },
-
-  /**
    * Function that iterates through all the widgets and products to activate
    * the tracking of widgets impression and products clicks.
    */
@@ -83,5 +75,16 @@ export const Widget = {
       // Deleting the cookie to avoid unnecessary/wrong requests;
       deleteCookie(global.cookieProductUrls);
     }
+  },
+
+  getHtml(widget) {
+    return ejs.render(templateWidget, { widget });
+  },
+
+  render(widget, field) {
+    // Injecting html of the widget
+    $(`.${field}`).append(this.getHtml(widget));
+    // Set the tracking of events.
+    this.listenEvents(widget);
   },
 };

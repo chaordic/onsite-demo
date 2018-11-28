@@ -1,6 +1,9 @@
 @import url("https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css");
 @import url("https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css");
 @import url("https://cdnjs.cloudflare.com/ajax/libs/octicons/3.5.0/octicons.min.css");
+@import url("https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css");
+// @import url("https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick-theme.min.css");
+
 
 $linx-color: #682c69;
 
@@ -20,23 +23,27 @@ $linx-color: #682c69;
   height: 20em;
 }
 
-//modifying default CSS from owl
-.owl-theme .owl-nav [class*='owl-'] {
-  color: #FFF;
-  font-size: 14px;
-  margin: 5px;
-  padding: 4px 7px;
-  background: #D6D6D6;
-  display: inline-block;
-  cursor: pointer;
-  border-radius: 3px;
-  width: 1.5em;
+button:focus {
+  outline: none;
 }
 
-.owl-theme .owl-nav [class*='owl-']:hover {
+.btn-refresh {
+  top: 1em;
+  right: 0.5em;
+  width: 1.7em;
+  height: 1.7em;
+  background-color: transparent;
+  border-radius: 4px;
+  border: none;
+  color: #444;
+  z-index: 1;
+  cursor: pointer;
+  transform: scale(1.1);
+}
+
+.btn-refresh:hover {
   background: $linx-color;
   color: #FFF;
-  text-decoration: none; 
 }
 
 // Adjusting arrows to sides.
@@ -46,23 +53,31 @@ $linx-color: #682c69;
   display: block !important;
 }
 
+//modifying default CSS from owl
+.owl-theme .owl-nav [class*='owl-'] {
+  font-size: 14px;
+  margin: 5px;
+  padding: 4px 7px;
+  background: #D6D6D6;
+  display: inline-block;
+  cursor: pointer;
+  border-radius: 4px;
+  width: 1.8em;
+  height: 1.8em;
+}
+
+.owl-theme .owl-nav [class*='owl-']:hover {
+  background: $linx-color;
+  color: #FFF;
+  text-decoration: none; 
+}
+
 .owl-prev {
   left: 0.5em;
 }
 
 .owl-next {
   right: 0.5em;
-}
-
-.owl-theme .owl-nav span {
-  font-size: 1.8em;
-}
-
-.btn-refresh {
-  top: 1em;
-  right: 1em;
-  width: 1.7em;
-  height: 1.7em;
 }
 
 .owl-carousel {
@@ -82,6 +97,13 @@ $linx-color: #682c69;
   display: block;
 }
 
+.img-smaller img {
+  max-height: 4em;
+  width: auto;
+  margin: auto;
+  display: block;
+}
+
 .content {
   height: 3em;
   overflow: hidden;
@@ -95,7 +117,48 @@ $linx-color: #682c69;
   box-sizing: content-box;
 }
 
-// Loader cariousel animation
+// vertical carousel
+.slick-vertical {
+  overflow: hidden;
+  position: relative;
+}
+
+.slick-slide {
+  margin: 5px 0;
+}
+
+.slick-list {
+  margin: -5px 0;
+}
+
+.slick-arrow {
+  position: absolute;
+  right: 0.5em;
+  z-index: 1;
+  background-color:transparent;
+  border-radius: 4px;
+  border: none;
+  width: 1.8em;
+  height: 1.5em;
+  text-align: center;
+  cursor: pointer;
+  color: #444;
+}
+
+.slick-arrow:hover {
+  background: $linx-color;
+  color: #FFF;
+}
+
+.slick-next {
+  bottom: 1em;
+}
+
+.slick-prev {
+  top: 1em;
+}
+
+// Loader carousel animation
 .loader {
   border: 5px solid #f3f3f3; /* Light grey */
   border-top: 5px solid $linx-color; /* Blue */

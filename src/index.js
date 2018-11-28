@@ -6,7 +6,7 @@ import { stringify } from '@linx-impulse/commons-js/query-string/stringify';
 import { PageClient } from './recommendations';
 import config from './config';
 import {
-  owlRender,
+  carouselRender,
   jsonRender,
   urlParams,
   listenToggleSwitch,
@@ -14,6 +14,7 @@ import {
 import './styles/style.scss';
 import { Widget } from './components/widget';
 import { ReferenceWidget } from './components/referenceWidget';
+import { HistoryWidget } from './components/historyWidget';
 
 function renderWidget(widget, field) {
   const referenceWidgets = [
@@ -23,22 +24,13 @@ function renderWidget(widget, field) {
     'UltimateBuy',
     'Wishlist',
   ];
-  // Checking witch type of widget to render.
-  if (referenceWidgets.indexOf(widget.feature) !== -1) {
-    // Injecting html of the widget.
-    $(`.${field}`).append(ReferenceWidget.render(widget));
-    // Set the tracking events of the widget
-    ReferenceWidget.listenEvents(widget);
-
-    $(`#${widget.id}-refresh`).mousedown(async () => {
-      // Refreshing the widget with the new reference.
-      ReferenceWidget.refreshWidget(widget, owlRender);
-    });
+  // Checking witch type of widget to render
+  if (widget.feature === 'HistoryPersonalized') {
+    HistoryWidget.render(widget, field);
+  } else if (referenceWidgets.indexOf(widget.feature) !== -1) {
+    ReferenceWidget.render(widget, field);
   } else {
-    // Injecting html of the widget
-    $(`.${field}`).append(Widget.render(widget));
-    // Set the tracking of events.
-    Widget.listenEvents(widget);
+    Widget.render(widget, field);
   }
 }
 
@@ -113,7 +105,7 @@ async function applyEventRequestApi(callback) {
 }
 
 function listenEventRequestApi() {
-  $('#try_btn').click(() => applyEventRequestApi(owlRender));
+  $('#try_btn').click(() => applyEventRequestApi(carouselRender));
 }
 
 const demoApp = {
@@ -132,7 +124,7 @@ const demoApp = {
     Widget.trackClicks();
     // Check if the url have the insert parameters and add them to the inputs.
     if (urlParams()) {
-      applyEventRequestApi(owlRender);
+      applyEventRequestApi(carouselRender);
     }
     // Listen to the interaction with the inputs.
     listenEventRequestApi();

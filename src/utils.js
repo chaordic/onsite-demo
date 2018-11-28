@@ -3,6 +3,7 @@ import ejs from 'ejs/ejs';
 import config from './config';
 import templateProduct from '../layout/templates/components/products.ejs';
 import templateReference from '../layout/templates/components/reference.ejs';
+import templateCarouselReference from '../layout/templates/components/carouselReference.ejs';
 
 const toggleSelector = $('.switch');
 
@@ -14,7 +15,7 @@ function setToggle(value) {
   toggleSelector.attr('toggle', value);
 }
 
-export function owlRender() {
+export function carouselRender() {
   $('.owl-carousel').each((index, element) => {
     if (!$(element).hasClass('owl-loaded')) {
       let quantity = 4;
@@ -44,6 +45,10 @@ export function owlRender() {
         smartSpeed: 400,
         autoplayTimeout: 5000,
         autoplayHoverPause: false,
+        navText: [
+          '<i class="octicon octicon-chevron-left"></i>',
+          '<i class="octicon octicon-chevron-right"></i>',
+        ],
       });
 
       // Sync autoplay of caroulsels.
@@ -53,11 +58,26 @@ export function owlRender() {
       }
     }
   });
+
+  $('.slick-vertical').each((index, element) => {
+    if (!$(element).hasClass('slick-initialized')) {
+      $(element).slick({
+        slidesToShow: 3,
+        slidesToScroll: 1,
+        vertical: true,
+        arrows: true,
+        infinite: false,
+        prevArrow: '<button type="button" class="slick-arrow slick-prev"><span class="octicon octicon-chevron-up"></span></button>',
+        nextArrow: '<button type="button" class="slick-arrow slick-next"><span class="octicon octicon-chevron-down"></button>',
+      });
+    }
+  });
 }
 
 const ejsHelper = {
   './components/product.ejs': templateProduct,
   './components/reference.ejs': templateReference,
+  './components/carouselReference.ejs': templateCarouselReference,
 };
 
 global.ejsInject = (path, widget) => {

@@ -9,6 +9,7 @@ import templateReferenceWidget from '../../layout/templates/referenceWidget.ejs'
 import templateReference from '../../layout/templates/components/reference.ejs';
 import templateProducts from '../../layout/templates/components/products.ejs';
 import templateLoading from '../../layout/templates/components/loading.ejs';
+import { carouselRender } from '../utils';
 
 function getRefreshWidget(widget) {
   // Requesting new widget from API based on a new reference.
@@ -63,14 +64,6 @@ function listenImpression(widget, reload) {
 }
 
 export const ReferenceWidget = {
-  /**
-   * Call the template of the widget carousel with one reference
-   * and returning the html.
-   */
-  render(widget) {
-    return ejs.render(templateReferenceWidget, { widget });
-  },
-
   async refreshWidget(widget, callback) {
     const widgetDiv = $(`#${widget.id}`);
     const referenceDiv = widgetDiv.find('.reference-card');
@@ -92,15 +85,19 @@ export const ReferenceWidget = {
     referenceDiv.append(ejs.render(templateReference, { widget: refreshedWidget }));
     productsDiv.append(ejs.render(templateProducts, { widget: refreshedWidget }));
 
-    // Turn off listener button
-    $(`#${widget.id}-refresh`).off();
-    // Turn off listener impressions.
-    $(`#${widget.id}-refresh`).mousedown(async () => {
-      this.refreshWidget(refreshedWidget, callback);
-    });
-
     callback();
+    this.listenRefresh(refreshedWidget);
     this.listenEvents(refreshedWidget, true);
+  },
+
+  listenRefresh(widget) {
+    const refreshButton = $(`#${widget.id}-refresh`);
+    // Turn off listener button
+    refreshButton.off();
+    refreshButton.mousedown(async () => {
+      // Refreshing the widget with the new reference.
+      ReferenceWidget.refreshWidget(widget, carouselRender);
+    });
   },
 
   /**
@@ -116,5 +113,17 @@ export const ReferenceWidget = {
     // For each product set the Click track listening.
     const recs = widget.displays[0].recommendations;
     Object.keys(recs).forEach(indexRec => listenClicks(recs[indexRec]));
+  },
+
+  getHtml(widget) {
+    return ejs.render(templateReferenceWidget, { widget });
+  },
+
+  render(widget, field) {
+    // Injecting html of the widget.
+    $(`.${field}`).append(this.getHtml(widget));
+    // Set the tracking events of the widget
+    this.listenEvents(widget);
+    this.listenRefresh(widget);
   },
 };
