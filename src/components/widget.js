@@ -9,7 +9,7 @@ import { ajax } from '@linx-impulse/commons-js/http/ajax';
 import templateWidget from '../../layout/templates/widget.ejs';
 
 function listenClicks(product) {
-  $(`#${product.id}`).find('a').mousedown(() => {
+  $(`#${product.id}`).mousedown(() => {
     /**
      * If product is clicked append on the cookie the trackUrl.
      * Remember to make the requests when page load in the next access.
@@ -38,8 +38,6 @@ function isViewed(widget) {
 }
 
 function listenImpression(widget) {
-  // If widget is viewed without scrolling when page load.
-  isViewed(widget);
   /**
    * Each time the user scrolls the page is checked
    * if there is any widget on his Viewport.

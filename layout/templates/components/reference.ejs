@@ -1,0 +1,17 @@
+<% 
+  const reference = widget.displays[0].references[0]; 
+  const imageUrl = formatUrl(reference.images.default);
+  const referenceUrl = formatUrl(reference.url);
+%>
+
+<a id="<%= reference.id %>" href="<%= referenceUrl %>" target="_blank">
+  <div class="img-wrapper">
+    <img src="<%= imageUrl %>" class="rounded">
+  </div>
+  <div class="content px-3 mt-3">
+    <span><%= reference.name %></span>
+  </div>
+  <div class="price px-3">
+    <span class="font-weight-bold">R$ <%= reference.price %></span>
+  </div>
+</a>

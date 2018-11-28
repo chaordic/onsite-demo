@@ -6,6 +6,7 @@
       "jquery": true
     },
     "rules": {
+      "no-console": "off",
       "no-param-reassign": ["error", { "props": false }],
       "import/prefer-default-export": 0,
       "max-len": ["error", {

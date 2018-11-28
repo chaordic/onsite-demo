@@ -55,6 +55,7 @@ export const PageClient = {
     dummy,
     homologation,
     showOnlyAvailable,
+    acceptEncoding,
   } = {}) {
     if (!apiKey) {
       return Promise.reject(new TypeError('apiKey is required to get pages'));
@@ -90,6 +91,7 @@ export const PageClient = {
           dummy,
           homologation,
           showOnlyAvailable,
+          'Accept-Enconding': acceptEncoding,
         },
         success: resolve,
         error: reject,

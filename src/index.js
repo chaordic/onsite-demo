@@ -1,18 +1,45 @@
+import {
+  setCookie,
+  getCookie,
+} from '@linx-impulse/commons-js/browser';
+import { stringify } from '@linx-impulse/commons-js/query-string/stringify';
 import { PageClient } from './recommendations';
 import config from './config';
 import {
   owlRender,
   jsonRender,
   urlParams,
+  listenToggleSwitch,
 } from './utils';
 import './styles/style.scss';
 import { Widget } from './components/widget';
+import { ReferenceWidget } from './components/referenceWidget';
 
 function renderWidget(widget, field) {
-  // Injecting html of the widget
-  $(`.${field}`).append(Widget.render(widget));
-  // Set the tracking of events.
-  Widget.listenEvents(widget);
+  const referenceWidgets = [
+    'ViewPersonalized',
+    'PurchasePersonalized',
+    'CartPersonalized',
+    'UltimateBuy',
+    'Wishlist',
+  ];
+  // Checking witch type of widget to render.
+  if (referenceWidgets.indexOf(widget.feature) !== -1) {
+    // Injecting html of the widget.
+    $(`.${field}`).append(ReferenceWidget.render(widget));
+    // Set the tracking events of the widget
+    ReferenceWidget.listenEvents(widget);
+
+    $(`#${widget.id}-refresh`).mousedown(async () => {
+      // Refreshing the widget with the new reference.
+      ReferenceWidget.refreshWidget(widget, owlRender);
+    });
+  } else {
+    // Injecting html of the widget
+    $(`.${field}`).append(Widget.render(widget));
+    // Set the tracking of events.
+    Widget.listenEvents(widget);
+  }
 }
 
 /**
@@ -50,17 +77,36 @@ async function applyEventRequestApi(callback) {
    * You may fill the parameters based on your info.
    */
   try {
-    const response = await PageClient.getRecommendations(
-      ['apiKey', 'secretKey', 'name', 'source', 'deviceId'].reduce((obj, key) => {
-        obj[key] = $(`#${key}`).val();
-        return obj;
-      }, {})
-    );
-
-    // Rendering slots and widgets from the response.
-    renderPage(response);
-    // Rendering carousels with owl-carousel plugin.
-    callback();
+    const labels = ['apiKey',
+      'secretKey',
+      'name',
+      'source',
+      'deviceId',
+      'productId',
+      'url',
+      'userId',
+      'productFormat',
+      'salesChannel',
+      'dummy',
+      'homologation',
+      'showOnlyAvailable',
+      'acceptEnconding',
+    ];
+    const inputs = labels.reduce((obj, key) => {
+      obj[key] = $(`#${key}`).val();
+      return obj;
+    }, {});
+    const response = await PageClient.getRecommendations(inputs);
+    if (getCookie('pageRendered') !== 'true') {
+      // Rendering slots and widgets from the response.
+      renderPage(response);
+      // Rendering carousels with owl-carousel plugin.
+      callback();
+      listenToggleSwitch();
+      setCookie('pageRendered', 'true');
+    } else {
+      window.location.assign(`${window.location.href.split('?')[0]}?${stringify(inputs)}`);
+    }
   } catch (e) {
     console.log(e);
   }
@@ -78,9 +124,10 @@ const demoApp = {
    * make the ajax request.
    */
   init() {
+    setCookie('pageRendered', 'false');
     // Var containing the name of the cookie that saves products URLs.
     global.cookieProductUrls = 'trackingUrl';
-    // List of tracked widgets based on their ID.
+    // List of tracked widgets and refreshes.
     global.impressionWidget = [];
     Widget.trackClicks();
     // Check if the url have the insert parameters and add them to the inputs.
