@@ -158,6 +158,10 @@ button:focus {
   top: 1em;
 }
 
+.references-card:hover {
+  cursor: pointer;
+}
+
 // Loader carousel animation
 .loader {
   border: 5px solid #f3f3f3; /* Light grey */
