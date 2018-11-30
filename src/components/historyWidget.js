@@ -1,10 +1,10 @@
 import ejs from 'ejs/ejs';
 import { ajax } from '@linx-impulse/commons-js/http/ajax';
-// import {
-//   setCookie,
-//   getCookie,
-//   isInViewport,
-// } from '@linx-impulse/commons-js/browser';
+import {
+  // setCookie,
+  // getCookie,
+  isInViewport,
+} from '@linx-impulse/commons-js/browser';
 import templateHistoryWidget from '../../layout/templates/historyWidget.ejs';
 import templateProducts from '../../layout/templates/components/products.ejs';
 import templateLoading from '../../layout/templates/components/loading.ejs';
@@ -19,6 +19,30 @@ function getRefreshWidget(ref) {
       error: reject,
     });
   });
+}
+
+function isViewed(widget) {
+  const reference = widget.displays[0].references[0];
+  const tuple = `${widget.id} ${reference.id}`;
+  // Check if widget is in Viewport and it was not viewed before.
+  if (isInViewport(document.getElementById(widget.id))
+    && global.impressionWidget.indexOf(tuple) === -1) {
+    // Push to impressions trackeds to declare that the widget was viewed.
+    global.impressionWidget.push(tuple);
+    // Ajax request to add the impression track to the API.
+    ajax({ url: widget.impressionUrl });
+  }
+}
+
+function listenImpression(widget, reload) {
+  if (reload === true) {
+    isViewed(widget);
+  }
+  /**
+   * Each time the user scrolls the page is checked
+   * if there is any widget on his Viewport.
+   */
+  $(window).scroll(() => isViewed(widget));
 }
 
 export const HistoryWidget = {
@@ -39,7 +63,7 @@ export const HistoryWidget = {
     productsDiv.empty();
     productsDiv.append(ejs.render(templateProducts, { widget: refreshedWidget }));
 
-    console.log(refreshedWidget);
+    this.listenEvents(refreshedWidget, true);
     callback();
   },
 
@@ -64,12 +88,18 @@ export const HistoryWidget = {
     });
   },
 
+  listenEvents(widget, reload) {
+    // Set the Widget Impression track listening.
+    listenImpression(widget, reload);
+  },
+
   getHtml(widget) {
     return ejs.render(templateHistoryWidget, { widget });
   },
 
   render(widget, field) {
     $(`.${field}`).append(this.getHtml(widget));
+    this.listenEvents(widget);
     this.listenRefresh(widget);
   },
 };

@@ -80,9 +80,9 @@ export const ReferenceWidget = {
 
     const refreshedWidget = await getRefreshWidget(widget);
 
-    productsDiv.empty();
     referenceDiv.children('div').remove();
     referenceDiv.append(ejs.render(templateReference, { widget: refreshedWidget }));
+    productsDiv.empty();
     productsDiv.append(ejs.render(templateProducts, { widget: refreshedWidget }));
 
     callback();
