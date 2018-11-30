@@ -8,8 +8,8 @@ import {
 import { ajax } from '@linx-impulse/commons-js/http/ajax';
 import templateWidget from '../../layout/templates/widget.ejs';
 
-function listenClicks(product) {
-  $(`#${product.id}`).mousedown(() => {
+function listenClicks(widgetId, product) {
+  $(`#${product.id}-${widgetId}`).mousedown(() => {
     /**
      * If product is clicked append on the cookie the trackUrl.
      * Remember to make the requests when page load in the next access.
@@ -55,7 +55,7 @@ export const Widget = {
     listenImpression(widget);
     // For each product set the Click track listening.
     const recs = widget.displays[0].recommendations;
-    Object.keys(recs).forEach(indexRec => listenClicks(recs[indexRec]));
+    Object.keys(recs).forEach(indexRec => listenClicks(widget.id, recs[indexRec]));
   },
 
   /**

@@ -22,8 +22,8 @@ function getRefreshWidget(widget) {
   });
 }
 
-function listenClicks(product) {
-  $(`#${product.id}`).mousedown(() => {
+function listenClicks(widgetId, product) {
+  $(`#${product.id}-${widgetId}`).mousedown(() => {
     /**
      * If product is clicked append on the cookie the trackUrl.
      * Remember to make the requests when page load in the next access.
@@ -109,10 +109,10 @@ export const ReferenceWidget = {
     listenImpression(widget, reload);
     // Set the Click track listening of the reference.
     const reference = widget.displays[0].references[0];
-    listenClicks(reference);
+    listenClicks(widget.id, reference);
     // For each product set the Click track listening.
     const recs = widget.displays[0].recommendations;
-    Object.keys(recs).forEach(indexRec => listenClicks(recs[indexRec]));
+    Object.keys(recs).forEach(indexRec => listenClicks(widget.id, recs[indexRec]));
   },
 
   getHtml(widget) {

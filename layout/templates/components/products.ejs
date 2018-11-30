@@ -11,7 +11,7 @@
     imageUrl = formatUrl(product.images.default);
     productUrl = formatUrl(product.url);
 %>
-  <a id="<%= product.id %>" href="<%= productUrl %>" target="_blank">
+  <a id="<%= product.id %>-<%= widget.id %>" href="<%= productUrl %>" target="_blank">
     <div class="img-wrapper">
       <img src="<%= imageUrl %>" class="rounded">
     </div>

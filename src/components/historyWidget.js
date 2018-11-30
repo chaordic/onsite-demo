@@ -1,8 +1,8 @@
 import ejs from 'ejs/ejs';
 import { ajax } from '@linx-impulse/commons-js/http/ajax';
 import {
-  // setCookie,
-  // getCookie,
+  setCookie,
+  getCookie,
   isInViewport,
 } from '@linx-impulse/commons-js/browser';
 import templateHistoryWidget from '../../layout/templates/historyWidget.ejs';
@@ -18,6 +18,25 @@ function getRefreshWidget(ref) {
       success: resolve,
       error: reject,
     });
+  });
+}
+
+function listenClicks(widgetId, product) {
+  $(`#${product.id}-${widgetId}`).mousedown(() => {
+    console.log(product.id);
+    /**
+     * If product is clicked append on the cookie the trackUrl.
+     * Remember to make the requests when page load in the next access.
+     */
+    const cookie = getCookie(global.cookieProductUrls);
+    let arr = [];
+
+    if (cookie) {
+      arr = JSON.parse(cookie);
+    }
+    arr.push(product.trackingUrl);
+    console.log(arr);
+    setCookie(global.cookieProductUrls, JSON.stringify(arr));
   });
 }
 
@@ -91,6 +110,9 @@ export const HistoryWidget = {
   listenEvents(widget, reload) {
     // Set the Widget Impression track listening.
     listenImpression(widget, reload);
+    // For each product set the Click track listening.
+    const recs = widget.displays[0].recommendations;
+    Object.keys(recs).forEach(indexRec => listenClicks(widget.id, recs[indexRec]));
   },
 
   getHtml(widget) {
