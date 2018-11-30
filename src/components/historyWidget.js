@@ -23,7 +23,6 @@ function getRefreshWidget(ref) {
 
 function listenClicks(widgetId, product) {
   $(`#${product.id}-${widgetId}`).mousedown(() => {
-    console.log(product.id);
     /**
      * If product is clicked append on the cookie the trackUrl.
      * Remember to make the requests when page load in the next access.
@@ -35,12 +34,16 @@ function listenClicks(widgetId, product) {
       arr = JSON.parse(cookie);
     }
     arr.push(product.trackingUrl);
-    console.log(arr);
     setCookie(global.cookieProductUrls, JSON.stringify(arr));
   });
 }
 
 function isViewed(widget) {
+  /**
+   * Widget id keeps the same and the selected reference id changes.
+   * Need to append to the tracked arrays this tuple
+   * because when reference changes you need to call another impression.
+   */
   const reference = widget.displays[0].references[0];
   const tuple = `${widget.id} ${reference.id}`;
   // Check if widget is in Viewport and it was not viewed before.
@@ -70,6 +73,7 @@ export const HistoryWidget = {
     const widgetDiv = $(`#${widget.id}`);
     const productsDiv = widgetDiv.find('.owl-carousel');
 
+    // Remove product carousel and add loading animation.
     productsDiv.trigger('destroy.owl.carousel').removeClass('owl-carousel owl-loaded');
     productsDiv.find('.owl-stage-outer').children().unwrap();
     productsDiv.empty();
@@ -77,13 +81,15 @@ export const HistoryWidget = {
 
     productsDiv.append(ejs.render(templateLoading));
 
+    // Get the new refreshed widget.
     const refreshedWidget = await getRefreshWidget(refs[index]);
 
     productsDiv.empty();
     productsDiv.append(ejs.render(templateProducts, { widget: refreshedWidget }));
-
-    this.listenEvents(refreshedWidget, true);
+    // Rendering carousels with callback render after response.
     callback();
+    // Set the tracking events to the new widget.
+    this.listenEvents(refreshedWidget, true);
   },
 
   listenRefresh(widget) {
@@ -93,11 +99,13 @@ export const HistoryWidget = {
     const referencesCards = $(`#${widget.id}`).find(highlightClass);
 
     referencesCards.mousedown(function () {
+      // Remove highlight from siblings.
       referencesCards.parent()
         .parent()
         .siblings()
         .find(highlightClass)
         .removeClass(highlight);
+      // For each reference in carousel listen the refresh.
       Object.keys(refs).forEach((index) => {
         if ($(this).attr('id').replace(/ref-/, '') === refs[index].id) {
           HistoryWidget.refreshWidget(widget, index, carouselRender);
@@ -115,13 +123,17 @@ export const HistoryWidget = {
     Object.keys(recs).forEach(indexRec => listenClicks(widget.id, recs[indexRec]));
   },
 
+  // Get the html to append in page.
   getHtml(widget) {
     return ejs.render(templateHistoryWidget, { widget });
   },
 
   render(widget, field) {
+    // Injecting html of the widget
     $(`.${field}`).append(this.getHtml(widget));
+    // Set the tracking of events.
     this.listenEvents(widget);
+    // Set the listening to refresh on widget based on selected reference.
     this.listenRefresh(widget);
   },
 };

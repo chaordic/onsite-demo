@@ -5,6 +5,8 @@ import templateProduct from '../layout/templates/components/products.ejs';
 import templateReference from '../layout/templates/components/reference.ejs';
 import templateCarouselReference from '../layout/templates/components/carouselReference.ejs';
 
+// Util functions for DEMO PURPOSES.
+
 const toggleSelector = $('.switch');
 
 function getToggle() {
@@ -67,8 +69,12 @@ export function carouselRender() {
         vertical: true,
         arrows: true,
         infinite: false,
-        prevArrow: '<button type="button" class="slick-arrow slick-prev"><span class="octicon octicon-chevron-up"></span></button>',
-        nextArrow: '<button type="button" class="slick-arrow slick-next"><span class="octicon octicon-chevron-down"></button>',
+        prevArrow: `<button type="button" class="slick-arrow slick-prev">
+                      <span class="octicon octicon-chevron-up"></span>
+                    </button>`,
+        nextArrow: `<button type="button" class="slick-arrow slick-next">
+                      <span class="octicon octicon-chevron-down">
+                    </button>`,
       });
     }
   });

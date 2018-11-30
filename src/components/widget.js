@@ -72,11 +72,12 @@ export const Widget = {
     if (cookie) {
       arr = JSON.parse(cookie);
       arr.forEach(url => ajax({ url }));
-      // Deleting the cookie to avoid unnecessary/wrong requests;
+      // Deleting the cookie to avoid unnecessary/wrong requests.
       deleteCookie(global.cookieProductUrls);
     }
   },
 
+  // Get the html to append in page.
   getHtml(widget) {
     return ejs.render(templateWidget, { widget });
   },

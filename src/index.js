@@ -92,9 +92,11 @@ async function applyEventRequestApi(callback) {
     if (getCookie('pageRendered') !== 'true') {
       // Rendering slots and widgets from the response.
       renderPage(response);
-      // Rendering carousels with owl-carousel plugin.
+      // Rendering carousels with callback render after response.
       callback();
+      // Demo toggle autoplay.
       listenToggleSwitch();
+      // Demo refresh page (to reset listeners).
       setCookie('pageRendered', 'true');
     } else {
       window.location.assign(`${window.location.href.split('?')[0]}?${stringify(inputs)}`);

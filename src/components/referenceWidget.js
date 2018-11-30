@@ -40,6 +40,11 @@ function listenClicks(widgetId, product) {
 }
 
 function isViewed(widget) {
+  /**
+   * Widget id keeps the same and reference id changes.
+   * Need to append to the tracked arrays this tuple
+   * because when reference changes you need to call another impression.
+   */
   const reference = widget.displays[0].references[0];
   const tuple = `${widget.id} ${reference.id}`;
   // Check if widget is in Viewport and it was not viewed before.
@@ -69,6 +74,7 @@ export const ReferenceWidget = {
     const referenceDiv = widgetDiv.find('.reference-card');
     const productsDiv = widgetDiv.find('.owl-carousel');
 
+    // Remove product carousel, the reference card and add loading animation.
     productsDiv.trigger('destroy.owl.carousel').removeClass('owl-carousel owl-loaded');
     productsDiv.find('.owl-stage-outer').children().unwrap();
     productsDiv.empty();
@@ -78,15 +84,18 @@ export const ReferenceWidget = {
     referenceDiv.append(ejs.render(templateLoading));
     productsDiv.append(ejs.render(templateLoading));
 
+    // Get the new refreshed widget.
     const refreshedWidget = await getRefreshWidget(widget);
 
     referenceDiv.children('div').remove();
     referenceDiv.append(ejs.render(templateReference, { widget: refreshedWidget }));
     productsDiv.empty();
     productsDiv.append(ejs.render(templateProducts, { widget: refreshedWidget }));
-
+    // Rendering carousels with callback render after response.
     callback();
+    // Set the listen to track new refreshes in widget.
     this.listenRefresh(refreshedWidget);
+    // Set the tracking events to the new widget.
     this.listenEvents(refreshedWidget, true);
   },
 
@@ -115,6 +124,7 @@ export const ReferenceWidget = {
     Object.keys(recs).forEach(indexRec => listenClicks(widget.id, recs[indexRec]));
   },
 
+  // Get the html to append in page.
   getHtml(widget) {
     return ejs.render(templateReferenceWidget, { widget });
   },
@@ -124,6 +134,7 @@ export const ReferenceWidget = {
     $(`.${field}`).append(this.getHtml(widget));
     // Set the tracking events of the widget
     this.listenEvents(widget);
+    // Set the listening of refresh reference and widget.
     this.listenRefresh(widget);
   },
 };
