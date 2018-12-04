@@ -8,8 +8,8 @@ import {
 import { ajax } from '@linx-impulse/commons-js/http/ajax';
 import templateWidget from '../../layout/templates/widget.ejs';
 
-function listenClicks(product) {
-  $(`#${product.id}`).mousedown(() => {
+function listenClicks(widgetId, product) {
+  $(`#${product.id}-${widgetId}`).mousedown(() => {
     /**
      * If product is clicked append on the cookie the trackUrl.
      * Remember to make the requests when page load in the next access.
@@ -47,14 +47,6 @@ function listenImpression(widget) {
 
 export const Widget = {
   /**
-   * Call the template of the widgets carousels
-   * and returning the html.
-   */
-  render(widget) {
-    return ejs.render(templateWidget, { widget });
-  },
-
-  /**
    * Function that iterates through all the widgets and products to activate
    * the tracking of widgets impression and products clicks.
    */
@@ -63,7 +55,7 @@ export const Widget = {
     listenImpression(widget);
     // For each product set the Click track listening.
     const recs = widget.displays[0].recommendations;
-    Object.keys(recs).forEach(indexRec => listenClicks(recs[indexRec]));
+    Object.keys(recs).forEach(indexRec => listenClicks(widget.id, recs[indexRec]));
   },
 
   /**
@@ -80,8 +72,20 @@ export const Widget = {
     if (cookie) {
       arr = JSON.parse(cookie);
       arr.forEach(url => ajax({ url }));
-      // Deleting the cookie to avoid unnecessary/wrong requests;
+      // Deleting the cookie to avoid unnecessary/wrong requests.
       deleteCookie(global.cookieProductUrls);
     }
+  },
+
+  // Get the html to append in page.
+  getHtml(widget) {
+    return ejs.render(templateWidget, { widget });
+  },
+
+  render(widget, field) {
+    // Injecting html of the widget
+    $(`.${field}`).append(this.getHtml(widget));
+    // Set the tracking of events.
+    this.listenEvents(widget);
   },
 };

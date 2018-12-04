@@ -5,17 +5,16 @@ import {
   getCookie,
   isInViewport,
 } from '@linx-impulse/commons-js/browser';
-import templateReferenceWidget from '../../layout/templates/referenceWidget.ejs';
-import templateReference from '../../layout/templates/components/reference.ejs';
+import templateHistoryWidget from '../../layout/templates/historyWidget.ejs';
 import templateProducts from '../../layout/templates/components/products.ejs';
 import templateLoading from '../../layout/templates/components/loading.ejs';
 import { carouselRender } from '../utils';
 
-function getRefreshWidget(widget) {
+function getRefreshWidget(ref) {
   // Requesting new widget from API based on a new reference.
   return new Promise((resolve, reject) => {
     ajax({
-      url: widget.displays[0].refreshReferenceUrl,
+      url: ref.getRecommendationsUrl,
       success: resolve,
       error: reject,
     });
@@ -41,7 +40,7 @@ function listenClicks(widgetId, product) {
 
 function isViewed(widget) {
   /**
-   * Widget id keeps the same and reference id changes.
+   * Widget id keeps the same and the selected reference id changes.
    * Need to append to the tracked arrays this tuple
    * because when reference changes you need to call another impression.
    */
@@ -68,57 +67,57 @@ function listenImpression(widget, reload) {
   $(window).scroll(() => isViewed(widget));
 }
 
-export const ReferenceWidget = {
-  async refreshWidget(widget, callback) {
+export const HistoryWidget = {
+  async refreshWidget(widget, index, callback) {
+    const refs = widget.displays[0].references;
     const widgetDiv = $(`#${widget.id}`);
-    const referenceDiv = widgetDiv.find('.reference-card');
     const productsDiv = widgetDiv.find('.owl-carousel');
 
-    // Remove product carousel, the reference card and add loading animation.
+    // Remove product carousel and add loading animation.
     productsDiv.trigger('destroy.owl.carousel').removeClass('owl-carousel owl-loaded');
     productsDiv.find('.owl-stage-outer').children().unwrap();
     productsDiv.empty();
     productsDiv.addClass('owl-carousel');
-    referenceDiv.children('a').remove();
 
-    referenceDiv.append(ejs.render(templateLoading));
     productsDiv.append(ejs.render(templateLoading));
 
     // Get the new refreshed widget.
-    const refreshedWidget = await getRefreshWidget(widget);
+    const refreshedWidget = await getRefreshWidget(refs[index]);
 
-    referenceDiv.children('div').remove();
-    referenceDiv.append(ejs.render(templateReference, { widget: refreshedWidget }));
     productsDiv.empty();
     productsDiv.append(ejs.render(templateProducts, { widget: refreshedWidget }));
     // Rendering carousels with callback render after response.
     callback();
-    // Set the listen to track new refreshes in widget.
-    this.listenRefresh(refreshedWidget);
     // Set the tracking events to the new widget.
     this.listenEvents(refreshedWidget, true);
   },
 
   listenRefresh(widget) {
-    const refreshButton = $(`#${widget.id}-refresh`);
-    // Turn off listener button
-    refreshButton.off();
-    refreshButton.mousedown(async () => {
-      // Refreshing the widget with the new reference.
-      ReferenceWidget.refreshWidget(widget, carouselRender);
+    const refs = widget.displays[0].references;
+    const highlight = 'border border-primary';
+    const highlightClass = '.references-card';
+    const referencesCards = $(`#${widget.id}`).find(highlightClass);
+
+    referencesCards.mousedown(function () {
+      // Remove highlight from siblings.
+      referencesCards.parent()
+        .parent()
+        .siblings()
+        .find(highlightClass)
+        .removeClass(highlight);
+      // For each reference in carousel listen the refresh.
+      Object.keys(refs).forEach((index) => {
+        if ($(this).attr('id').replace(/ref-/, '') === refs[index].id) {
+          HistoryWidget.refreshWidget(widget, index, carouselRender);
+        }
+      });
+      $(this).addClass(highlight);
     });
   },
 
-  /**
-   * Function that iterates through all the widgets and products to activate
-   * the tracking of widgets impression and products clicks.
-   */
   listenEvents(widget, reload) {
     // Set the Widget Impression track listening.
     listenImpression(widget, reload);
-    // Set the Click track listening of the reference.
-    const reference = widget.displays[0].references[0];
-    listenClicks(widget.id, reference);
     // For each product set the Click track listening.
     const recs = widget.displays[0].recommendations;
     Object.keys(recs).forEach(indexRec => listenClicks(widget.id, recs[indexRec]));
@@ -126,15 +125,15 @@ export const ReferenceWidget = {
 
   // Get the html to append in page.
   getHtml(widget) {
-    return ejs.render(templateReferenceWidget, { widget });
+    return ejs.render(templateHistoryWidget, { widget });
   },
 
   render(widget, field) {
-    // Injecting html of the widget.
+    // Injecting html of the widget
     $(`.${field}`).append(this.getHtml(widget));
-    // Set the tracking events of the widget
+    // Set the tracking of events.
     this.listenEvents(widget);
-    // Set the listening of refresh reference and widget.
+    // Set the listening to refresh on widget based on selected reference.
     this.listenRefresh(widget);
   },
 };

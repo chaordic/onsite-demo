@@ -1,0 +1,29 @@
+<% 
+  const refs = widget.displays[0].references;
+  let reference;
+  let imageUrl;
+  let referenceUrl;
+  let borderClass;
+
+  Object.keys(refs).forEach((index) => {
+    reference = refs[index];
+    imageUrl = formatUrl(reference.images.default);
+    referenceUrl = formatUrl(reference.url);
+    borderClass = (index == 0) ? 'border border-primary' : '';
+%>
+    <div id="ref-<%= reference.id %>" class="references-card rounded <%= borderClass %>">
+      <div class="img-smaller float-left w-25 py-2">
+        <img src="<%= imageUrl %>" class="rounded">
+      </div>
+      <div class="float-right w-75">
+        <div class="content px-1">
+          <span><%= reference.name %></span>
+        </div>
+        <div class="price px-1">
+          <span class="font-weight-bold">R$ <%= reference.price %></span>
+        </div>
+      </div>
+    </div>
+<%
+  });
+%>
