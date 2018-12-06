@@ -153,6 +153,26 @@ button:focus {
   cursor: pointer;
 }
 
+// Push classes
+
+.menu-labels {
+  font-size: 1.3em;
+  border-style: solid;
+  border-color: transparent;
+  border-width: 0px 0px 3px 0px;
+}
+
+.menu-labels:hover {
+  cursor: pointer;
+  border-color: $linx-color;
+}
+
+.menu-highlight {
+  border-style: solid;
+  border-width: 0px 0px 3px 0px;
+  border-color: $linx-color;
+}
+
 // Loader carousel animation
 .loader {
   border: 5px solid #f3f3f3; /* Light grey */

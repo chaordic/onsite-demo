@@ -1,0 +1,22 @@
+<h4>
+  <span class="font-weight-bold">Tipo de vitrine: </span> <%= widget.feature %>
+</h4>
+
+<div class="text-center"> 
+  <% 
+  const menu = widget.displays[0].menu;
+  let highlightClass;
+  Object.keys(menu).forEach((index) => {
+    highlightClass = (index == 0) ? 'menu-highlight' : '';
+  %>
+    <div class="menu-labels font-weight-bold d-inline-block mx-2 my-1 <%= highlightClass %>">
+      <%= menu[index].label; %>
+    </div> 
+  <%
+  });
+  %>
+</div>
+
+<div id="<%= widget.id %>" class="owl-carousel owl-4 owl-theme container-widget my-2">
+  <%- ejsInject('./components/product.ejs', widget); %>
+</div>
