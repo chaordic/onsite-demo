@@ -6,6 +6,7 @@ import {
   isInViewport,
 } from '@linx-impulse/commons-js/browser';
 import templateHistoryWidget from '../../layout/templates/historyWidget.ejs';
+import templateWidget from '../../layout/templates/widget.ejs';
 import templateProducts from '../../layout/templates/components/products.ejs';
 import templateLoading from '../../layout/templates/components/loading.ejs';
 import { carouselRender } from '../utils';
@@ -40,12 +41,15 @@ function listenClicks(widgetId, product) {
 
 function isViewed(widget) {
   /**
-   * Widget id keeps the same and the selected reference id changes.
+   * If widget is configured to have references, its id keeps the
+   * same and the selected reference id changes.
    * Need to append to the tracked arrays this tuple
    * because when reference changes you need to call another impression.
+   * If is not configured to have references it has the same
+   * behavior as Widget.js.
    */
-  const reference = widget.displays[0].references[0];
-  const tuple = `${widget.id} ${reference.id}`;
+  const refs = widget.displays[0].references;
+  const tuple = refs.length > 0 ? `${widget.id} ${refs[0].id}` : `${widget.id}`;
   // Check if widget is in Viewport and it was not viewed before.
   if (isInViewport(document.getElementById(widget.id))
     && global.impressionWidget.indexOf(tuple) === -1) {
@@ -125,15 +129,27 @@ export const HistoryWidget = {
 
   // Get the html to append in page.
   getHtml(widget) {
-    return ejs.render(templateHistoryWidget, { widget });
+    const refsSize = widget.displays[0].references.length;
+    let widgetHtml;
+    // Check if the History widget is configured with references.
+    if (refsSize > 0) {
+      widgetHtml = ejs.render(templateHistoryWidget, { widget });
+    } else {
+      widgetHtml = ejs.render(templateWidget, { widget });
+    }
+    return widgetHtml;
   },
 
   render(widget, field) {
+    const refsSize = widget.displays[0].references.length;
     // Injecting html of the widget
     $(`.${field}`).append(this.getHtml(widget));
     // Set the tracking of events.
     this.listenEvents(widget);
-    // Set the listening to refresh on widget based on selected reference.
-    this.listenRefresh(widget);
+    // Check if the History widget is configured with references.
+    if (refsSize > 0) {
+      // Set the listening to refresh on widget based on selected reference.
+      this.listenRefresh(widget);
+    }
   },
 };
