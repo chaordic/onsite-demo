@@ -2,7 +2,7 @@ import {
   setCookie,
   getCookie,
 } from '@linx-impulse/commons-js/browser';
-import { stringify } from '@linx-impulse/commons-js/query-string/stringify';
+import { stringify } from '@linx-impulse/commons-js/query-string';
 import { PageClient } from './recommendations';
 import config from './config';
 import {
@@ -11,10 +11,10 @@ import {
   urlParams,
   listenToggleSwitch,
 } from './utils';
-import './styles/style.scss';
 import { Widget } from './components/widget';
 import { ReferenceWidget } from './components/referenceWidget';
 import { HistoryWidget } from './components/historyWidget';
+import './styles/style.scss';
 
 function renderWidget(widget, field) {
   const referenceWidgets = [
