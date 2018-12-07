@@ -1,8 +1,8 @@
 import ejs from 'ejs/ejs';
 import { ajax } from '@linx-impulse/commons-js/http/ajax';
 import {
-  // setCookie,
-  // getCookie,
+  setCookie,
+  getCookie,
   isInViewport,
 } from '@linx-impulse/commons-js/browser';
 import templatePushWidget from '../../layout/templates/pushWidget.ejs';
@@ -21,6 +21,23 @@ function getRefreshWidget(menu) {
   });
 }
 
+function listenClicks(widgetId, product) {
+  $(`#${product.id}-${widgetId}`).mousedown(() => {
+    /**
+     * If product is clicked append on the cookie the trackUrl.
+     * Remember to make the requests when page load in the next access.
+     */
+    const cookie = getCookie(global.cookieProductUrls);
+    let arr = [];
+
+    if (cookie) {
+      arr = JSON.parse(cookie);
+    }
+    arr.push(product.trackingUrl);
+    setCookie(global.cookieProductUrls, JSON.stringify(arr));
+  });
+}
+
 function isViewed(widget, selectedMenu) {
   /**
    * Widget id keeps the same and the selected reference id changes.
@@ -33,7 +50,6 @@ function isViewed(widget, selectedMenu) {
     && global.impressionWidget.indexOf(tuple) === -1) {
     // Push to impressions trackeds to declare that the widget was viewed.
     global.impressionWidget.push(tuple);
-    console.log(tuple);
     // Ajax request to add the impression track to the API.
     ajax({ url: widget.impressionUrl });
   }
@@ -104,8 +120,8 @@ export const PushWidget = {
     // Set the Widget Impression track listening.
     listenImpression(widget, selectedMenu, reload);
     // For each product set the Click track listening.
-    // const recs = widget.displays[0].recommendations;
-    // Object.keys(recs).forEach(indexRec => listenClicks(widget.id, recs[indexRec]));
+    const recs = widget.displays[0].recommendations;
+    Object.keys(recs).forEach(indexRec => listenClicks(widget.id, recs[indexRec]));
   },
 
   // Get the html to append in page.
