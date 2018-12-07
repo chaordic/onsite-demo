@@ -9,7 +9,7 @@
   Object.keys(menu).forEach((index) => {
     highlightClass = (index == 0) ? 'menu-highlight' : '';
   %>
-    <div id="<%= menu[index].campaignId %>" 
+    <div id="<%= menu[index].index %>" 
     class="menu-labels font-weight-bold d-inline-block mx-2 my-1 <%= highlightClass %>">
       <%= menu[index].label; %>
     </div> 
