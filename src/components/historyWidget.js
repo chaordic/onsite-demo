@@ -47,7 +47,7 @@ function isViewed(widget) {
    * because when reference changes you need to call another impression.
    */
   const refs = widget.displays[0].references;
-  const tuple = `${widget.id} ${refs[0].id}`;
+  const tuple = `${widget.id}-${refs[0].id}`;
   // Check if widget is in Viewport and it was not viewed before.
   if (isInViewport(document.getElementById(widget.id))
     && global.impressionWidget.indexOf(tuple) === -1) {
@@ -113,6 +113,7 @@ export const HistoryWidget = {
           HistoryWidget.refreshWidget(widget, index, carouselRender);
         }
       });
+      // Add highlight to the selected.
       $(this).addClass(highlight);
     });
   },
@@ -141,6 +142,7 @@ export const HistoryWidget = {
       // Set the listening to refresh on widget based on selected reference.
       this.listenRefresh(widget);
     } else {
+      // If there are no references carousel render as a default widget.
       Widget.render(widget, field);
     }
   },

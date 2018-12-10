@@ -41,11 +41,11 @@ function listenClicks(widgetId, product) {
 
 function isViewed(widget, selectedMenu) {
   /**
-   * Widget id keeps the same and the selected reference id changes.
+   * Widget id stays the same and the selected menu label changes.
    * Need to append to the tracked arrays this tuple
-   * because when reference changes you need to call another impression.
+   * because when the selected menu changes you need to call another impression.
    */
-  const tuple = `${widget.id} ${selectedMenu.label}`;
+  const tuple = `${widget.id}-${selectedMenu.label}`;
   // Check if widget is in Viewport and it was not viewed before.
   if (isInViewport(document.getElementById(widget.id))
     && global.impressionWidget.indexOf(tuple) === -1) {
@@ -68,9 +68,8 @@ function listenImpression(widget, selectedMenu, reload) {
 }
 
 export const PushWidget = {
-  async refreshWidget(widget, index, callback) {
+  async refreshWidget(widget, menu, callback) {
     const widgetDiv = $(`#${widget.id}`);
-    const menu = widget.displays[0].menu[index];
 
     // Remove product carousel, the reference card and add loading animation.
     widgetDiv.trigger('destroy.owl.carousel').removeClass('owl-carousel owl-loaded');
@@ -96,13 +95,17 @@ export const PushWidget = {
     const highlight = 'menu-highlight';
     const menuArray = widget.displays[0].menu;
 
-    widgetLabels.mousedown(function () {
+    widgetLabels.mousedown(function onLabelSelect() {
+      // Add highlight to the selected.
       $(this).addClass(highlight);
+      // Remove highlight from siblings.
       $(this).siblings().removeClass(highlight);
-
+      // For each menu listen the refresh.
       Object.keys(menuArray).forEach((index) => {
-        if (parseInt($(this).attr('id'), 10) === menuArray[index].index) {
-          PushWidget.refreshWidget(widget, index, carouselRender);
+        // The menus are identified with their unique campaignIds.
+        if ($(this).attr('id') === menuArray[index].campaignId) {
+          // The refresh will be applyed based on the selected menu.
+          PushWidget.refreshWidget(widget, menuArray[index], carouselRender);
         }
       });
     });
@@ -113,7 +116,7 @@ export const PushWidget = {
     let selectedMenu;
 
     Object.keys(menus).forEach((index) => {
-      if (menus[index].selected === true) {
+      if (menus[index].selected) {
         selectedMenu = menus[index];
       }
     });
@@ -132,15 +135,17 @@ export const PushWidget = {
 
   render(widget, field) {
     const menus = widget.displays[0].menu;
-    if (menus === undefined) {
-      Widget.render(widget, field);
-    } else {
+    // Check if the Push widget is configured with menu.
+    if (menus) {
       // Injecting html of the widget
       $(`.${field}`).append(this.getHtml(widget));
       // Set the tracking of events.
       this.listenEvents(widget);
       // Set the listening to refresh on widget based on selected menu.
       this.listenRefresh(widget);
+    } else {
+      // If there is no menu is rendered as a default widget.
+      Widget.render(widget, field);
     }
   },
 };

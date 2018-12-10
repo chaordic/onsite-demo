@@ -41,12 +41,12 @@ function listenClicks(widgetId, product) {
 
 function isViewed(widget) {
   /**
-   * Widget id keeps the same and reference id changes.
+   * Widget id stays the same and reference id changes.
    * Need to append to the tracked arrays this tuple
    * because when reference changes you need to call another impression.
    */
   const reference = widget.displays[0].references[0];
-  const tuple = `${widget.id} ${reference.id}`;
+  const tuple = `${widget.id}-${reference.id}`;
   // Check if widget is in Viewport and it was not viewed before.
   if (isInViewport(document.getElementById(widget.id))
     && global.impressionWidget.indexOf(tuple) === -1) {
