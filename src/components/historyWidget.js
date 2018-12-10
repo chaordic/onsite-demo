@@ -5,8 +5,8 @@ import {
   getCookie,
   isInViewport,
 } from '@linx-impulse/commons-js/browser';
+import { Widget } from './widget';
 import templateHistoryWidget from '../../layout/templates/historyWidget.ejs';
-import templateWidget from '../../layout/templates/widget.ejs';
 import templateProducts from '../../layout/templates/components/products.ejs';
 import templateLoading from '../../layout/templates/components/loading.ejs';
 import { carouselRender } from '../utils';
@@ -45,11 +45,9 @@ function isViewed(widget) {
    * same and the selected reference id changes.
    * Need to append to the tracked arrays this tuple
    * because when reference changes you need to call another impression.
-   * If is not configured to have references it has the same
-   * behavior as Widget.js.
    */
   const refs = widget.displays[0].references;
-  const tuple = refs.length > 0 ? `${widget.id} ${refs[0].id}` : `${widget.id}`;
+  const tuple = `${widget.id} ${refs[0].id}`;
   // Check if widget is in Viewport and it was not viewed before.
   if (isInViewport(document.getElementById(widget.id))
     && global.impressionWidget.indexOf(tuple) === -1) {
@@ -129,27 +127,21 @@ export const HistoryWidget = {
 
   // Get the html to append in page.
   getHtml(widget) {
-    const refsSize = widget.displays[0].references.length;
-    let widgetHtml;
-    // Check if the History widget is configured with references.
-    if (refsSize > 0) {
-      widgetHtml = ejs.render(templateHistoryWidget, { widget });
-    } else {
-      widgetHtml = ejs.render(templateWidget, { widget });
-    }
-    return widgetHtml;
+    return ejs.render(templateHistoryWidget, { widget });
   },
 
   render(widget, field) {
     const refsSize = widget.displays[0].references.length;
-    // Injecting html of the widget
-    $(`.${field}`).append(this.getHtml(widget));
-    // Set the tracking of events.
-    this.listenEvents(widget);
     // Check if the History widget is configured with references.
     if (refsSize > 0) {
+      // Injecting html of the widget
+      $(`.${field}`).append(this.getHtml(widget));
+      // Set the tracking of events.
+      this.listenEvents(widget);
       // Set the listening to refresh on widget based on selected reference.
       this.listenRefresh(widget);
+    } else {
+      Widget.render(widget, field);
     }
   },
 };

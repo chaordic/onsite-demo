@@ -15,6 +15,7 @@ import { Widget } from './components/widget';
 import { ReferenceWidget } from './components/referenceWidget';
 import { HistoryWidget } from './components/historyWidget';
 import { PushWidget } from './components/pushWidget';
+import './styles/style.scss';
 
 function renderWidget(widget, field) {
   const referenceWidgets = [

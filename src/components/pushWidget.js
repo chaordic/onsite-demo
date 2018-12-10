@@ -5,6 +5,7 @@ import {
   getCookie,
   isInViewport,
 } from '@linx-impulse/commons-js/browser';
+import { Widget } from './widget';
 import templatePushWidget from '../../layout/templates/pushWidget.ejs';
 import templateProducts from '../../layout/templates/components/products.ejs';
 import templateLoading from '../../layout/templates/components/loading.ejs';
@@ -130,11 +131,16 @@ export const PushWidget = {
   },
 
   render(widget, field) {
-    // Injecting html of the widget
-    $(`.${field}`).append(this.getHtml(widget));
-    // Set the tracking of events.
-    this.listenEvents(widget);
-    // Set the listening to refresh on widget based on selected menu.
-    this.listenRefresh(widget);
+    const menus = widget.displays[0].menu;
+    if (menus === undefined) {
+      Widget.render(widget, field);
+    } else {
+      // Injecting html of the widget
+      $(`.${field}`).append(this.getHtml(widget));
+      // Set the tracking of events.
+      this.listenEvents(widget);
+      // Set the listening to refresh on widget based on selected menu.
+      this.listenRefresh(widget);
+    }
   },
 };
