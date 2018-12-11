@@ -5,10 +5,10 @@
 <div id="<%= widget.id %>" class="row container-widget my-2">  
   <div class="reference-card border-right p-3 w-25 position-relative">
     <button id="<%= widget.id %>-refresh" class="octicon octicon-sync btn-refresh p-1 position-absolute"></button>
-    <%- ejsInject('./components/reference.ejs', widget); %>
+    <%- ejsInject('./components/reference.ejs', { widget }); %>
   </div>
 
   <div class="owl-carousel owl-3 owl-theme w-75 py-3" id="<%= widget.id %>">
-    <%- ejsInject('./components/product.ejs', widget); %>
+    <%- ejsInject('./components/product.ejs', { widget }); %>
   </div>
 </div>

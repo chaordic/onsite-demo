@@ -4,6 +4,8 @@ import config from './config';
 import templateProduct from '../layout/templates/components/products.ejs';
 import templateReference from '../layout/templates/components/reference.ejs';
 import templateCarouselReference from '../layout/templates/components/carouselReference.ejs';
+import templateFbtCard from '../layout/templates/components/fbtCard.ejs';
+import templateFbtControls from '../layout/templates/components/fbtControls.ejs';
 
 // Util functions for DEMO PURPOSES.
 
@@ -84,10 +86,18 @@ const ejsHelper = {
   './components/product.ejs': templateProduct,
   './components/reference.ejs': templateReference,
   './components/carouselReference.ejs': templateCarouselReference,
+  './components/fbtCard.ejs': templateFbtCard,
+  './components/fbtControls.ejs': templateFbtControls,
 };
 
-global.ejsInject = (path, widget) => {
-  const template = ejs.render(ejsHelper[path], { widget });
+global.ejsInject = (path, options) => {
+  const obj = {
+    widget: options.widget,
+    product: options.product,
+    fbtControls: options.fbtControls,
+    index: options.index,
+  };
+  const template = ejs.render(ejsHelper[path], obj);
   return template;
 };
 

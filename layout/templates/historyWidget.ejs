@@ -3,11 +3,11 @@
 </h4>
 
 <div id="<%= widget.id %>" class="row container-widget my-2">  
-  <div class="slick-vertical border-right p-3 w-25">
-    <%- ejsInject('./components/carouselReference.ejs', widget); %>
+  <div class="slick-vertical border-right px-3 w-25">
+    <%- ejsInject('./components/carouselReference.ejs', { widget }); %>
   </div>
 
   <div class="owl-carousel owl-3 owl-theme w-75 py-3" id="<%= widget.id %>">
-    <%- ejsInject('./components/product.ejs', widget); %>
+    <%- ejsInject('./components/product.ejs', { widget }); %>
   </div>
 </div>

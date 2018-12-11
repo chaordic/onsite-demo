@@ -1,6 +1,6 @@
 <h4>
   <span class="font-weight-bold">Tipo de vitrine: </span> <%= widget.feature %>
 </h4>
-<div id="<%= widget.id %>" class="owl-carousel owl-4 owl-theme container-widget my-2">
-  <%- ejsInject('./components/product.ejs', widget); %>
+<div id="<%= widget.id %>" class="owl-carousel owl-4 owl-theme container-widget my-3">
+  <%- ejsInject('./components/product.ejs', { widget }); %>
 </div>

@@ -1,0 +1,69 @@
+<%
+const reference = widget.displays[0].references[0];
+%>
+<h4>
+  <span class="font-weight-bold">Tipo de vitrine: </span> <%= widget.feature %>
+</h4>
+
+<div id="<%= widget.id %>" class="container-widget pb-3 my-2">
+  <div class="card-fbt">
+    <div class="fbt-controls ml-2">Você está vendo</div>
+    <%- ejsInject('./components/fbtCard.ejs', { widget, product: reference }); %>
+  </div>
+  <div class="operator-fbt"> 
+    +
+  </div>
+  <div class="card-fbt">
+    <%-
+    ejsInject('./components/fbtControls.ejs', { 
+      fbtControls: { skip: true, remove: true },
+    }); 
+    %>
+    <%-
+    ejsInject('./components/fbtCard.ejs', { 
+      widget, 
+      product: widget.displays[0].recommendations[0],
+      index: 0,
+    }); 
+    %>
+  </div>
+  <div class="operator-fbt"> 
+    +
+  </div>
+  <div class="card-fbt">
+    <%-
+    ejsInject('./components/fbtControls.ejs', { 
+      fbtControls: { skip: true, remove: true },
+    }); 
+    %>
+    <%-
+    ejsInject('./components/fbtCard.ejs', { 
+      widget, 
+      product: widget.displays[0].recommendations[1],
+      index: 1,
+    }); 
+    %>
+  </div>
+  <div class="operator-fbt"> 
+    =
+  </div>
+  <div class="card-fbt">
+    <div class="fbt-summary">
+      Preço total
+      <br>
+      dos 
+      <span class="count-fbt linx-text font-weight-bold">3</span>
+      produtos
+      <br>
+      <span class="linx-text font-weight-bold">R$</span>
+      <span class="price-fbt linx-text font-weight-bold">
+        <%= 
+        reference.price + widget.displays[0].recommendations[0].price 
+          + widget.displays[0].recommendations[0].price;
+        %>
+      </span>
+
+      <button type="button" class="rounded btn btn-primary mt-3 mx-auto d-block">Compre junto!</button>
+    </div>
+  </div>
+</div>
