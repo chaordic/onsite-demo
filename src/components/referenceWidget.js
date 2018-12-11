@@ -87,16 +87,26 @@ export const ReferenceWidget = {
     // Get the new refreshed widget.
     const refreshedWidget = await getRefreshWidget(widget);
 
-    referenceDiv.children('div').remove();
-    referenceDiv.append(ejs.render(templateReference, { widget: refreshedWidget }));
-    productsDiv.empty();
-    productsDiv.append(ejs.render(templateProducts, { widget: refreshedWidget }));
-    // Rendering carousels with callback render after response.
-    callback();
-    // Set the listen to track new refreshes in widget.
-    this.listenRefresh(refreshedWidget);
-    // Set the tracking events to the new widget.
-    this.listenEvents(refreshedWidget, true);
+    if (!$.isEmptyObject(refreshedWidget)) {
+      console.log(refreshedWidget);
+      referenceDiv.children('div').remove();
+      referenceDiv.append(ejs.render(templateReference, { widget: refreshedWidget }));
+      productsDiv.empty();
+      productsDiv.append(ejs.render(templateProducts, { widget: refreshedWidget }));
+      // Rendering carousels with callback render after response.
+      callback();
+      // Set the listen to track new refreshes in widget.
+      this.listenRefresh(refreshedWidget);
+      // Set the tracking events to the new widget.
+      this.listenEvents(refreshedWidget, true);
+    } else {
+      referenceDiv.children('div').remove();
+      referenceDiv.append(ejs.render(templateReference, { widget }));
+      productsDiv.empty();
+      productsDiv.append(ejs.render(templateProducts, { widget }));
+      // Rendering carousels with callback render after response.
+      callback();
+    }
   },
 
   listenRefresh(widget) {
