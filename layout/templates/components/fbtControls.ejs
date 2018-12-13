@@ -4,17 +4,23 @@
   %>
     <div class="fbt-skip fbt-button px-2">
       Trocar 
-      <span class="octicon octicon-sync ml-1"></span> 
+      <span class="octicon octicon-sync"></span> 
     </div>
   <% 
   }
-  %>
-  <% 
   if (fbtControls.remove === true) {
   %>
     <div class="fbt-remove fbt-button px-2">
       Remover 
-      <span class="octicon octicon-x ml-1"></span> 
+      <span class="octicon octicon-x"></span> 
+    </div>
+  <% 
+  }
+  if (fbtControls.add === true) {
+  %>
+    <div class="fbt-add fbt-button px-2 mx-auto">
+      Adicionar
+      <span class="octicon octicon-plus"></span> 
     </div>
   <% 
   }

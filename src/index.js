@@ -65,11 +65,10 @@ function renderPage(response) {
   jsonRender(response);
   // Unhiding the container with the slots and widgets.
   $(`#${config.html.demoContainer}`).removeClass('d-none');
+  $(`#${config.html.demoContainer}`).animate({ opacity: 1 }, 1200);
 }
 
 async function applyEventRequestApi(callback) {
-  // Hiding the container with the slots and widgets.
-  $(`#${config.html.demoContainer}`).addClass('d-none');
   /**
    * Requesting response from API based on the passed parameters.
    * You may fill the parameters based on your info.

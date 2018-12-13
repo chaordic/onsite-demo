@@ -3,14 +3,14 @@ imageUrl = formatUrl(product.images.default);
 productUrl = formatUrl(product.url);
 %>
 <a id="<%= product.id %>-<%= widget.id %>" href="<%= productUrl %>" 
-  target="_blank" index="<%= index %>">
-  <div class="img-wrapper">
+  target="_blank" class="abled" product="<%= product.id %>">
+  <div class="img-wrapper abled">
     <img src="<%= imageUrl %>" class="rounded">
   </div>
-  <div class="content px-3 mt-3">
+  <div class="content px-3 mt-3 abled">
     <span><%= product.name %></span>
   </div>
-  <div class="price px-3">
+  <div class="price px-3 abled">
     <span class="font-weight-bold">R$ <%= product.price %></span>
   </div>
 </a>

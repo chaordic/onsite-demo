@@ -23,7 +23,6 @@ const reference = widget.displays[0].references[0];
     ejsInject('./components/fbtCard.ejs', { 
       widget, 
       product: widget.displays[0].recommendations[0],
-      index: 0,
     }); 
     %>
   </div>
@@ -40,30 +39,27 @@ const reference = widget.displays[0].references[0];
     ejsInject('./components/fbtCard.ejs', { 
       widget, 
       product: widget.displays[0].recommendations[1],
-      index: 1,
     }); 
     %>
   </div>
   <div class="operator-fbt"> 
     =
   </div>
-  <div class="card-fbt">
-    <div class="fbt-summary">
-      Preço total
-      <br>
-      dos 
-      <span class="count-fbt linx-text font-weight-bold">3</span>
-      produtos
-      <br>
-      <span class="linx-text font-weight-bold">R$</span>
-      <span class="price-fbt linx-text font-weight-bold">
-        <%= 
-        reference.price + widget.displays[0].recommendations[0].price 
-          + widget.displays[0].recommendations[0].price;
-        %>
-      </span>
+  <div class="fbt-summary">
+    Preço total
+    <br>
+    dos 
+    <span class="count-fbt linx-text font-weight-bold">3</span>
+    produtos
+    <br>
+    <span class="linx-text font-weight-bold">R$</span>
+    <span class="price-fbt linx-text font-weight-bold">
+      <%= 
+      (reference.price + widget.displays[0].recommendations[0].price 
+        + widget.displays[0].recommendations[1].price).toFixed(2);
+      %>
+    </span>
 
-      <button type="button" class="rounded btn btn-primary mt-3 mx-auto d-block">Compre junto!</button>
-    </div>
+    <button type="button" class="rounded btn btn-primary mt-3 mx-auto d-block">Compre junto!</button>
   </div>
 </div>
