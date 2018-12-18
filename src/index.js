@@ -14,6 +14,7 @@ import {
 import { Widget } from './components/widget';
 import { ReferenceWidget } from './components/referenceWidget';
 import { HistoryWidget } from './components/historyWidget';
+import { PushWidget } from './components/pushWidget';
 import './styles/style.scss';
 
 function renderWidget(widget, field) {
@@ -27,6 +28,8 @@ function renderWidget(widget, field) {
   // Checking witch type of widget to render
   if (widget.feature === 'HistoryPersonalized') {
     HistoryWidget.render(widget, field);
+  } else if (widget.feature === 'Push') {
+    PushWidget.render(widget, field);
   } else if (referenceWidgets.indexOf(widget.feature) !== -1) {
     ReferenceWidget.render(widget, field);
   } else {

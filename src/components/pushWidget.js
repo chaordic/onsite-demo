@@ -6,16 +6,16 @@ import {
   isInViewport,
 } from '@linx-impulse/commons-js/browser';
 import { Widget } from './widget';
-import templateHistoryWidget from '../../layout/templates/historyWidget.ejs';
+import templatePushWidget from '../../layout/templates/pushWidget.ejs';
 import templateProducts from '../../layout/templates/components/products.ejs';
 import templateLoading from '../../layout/templates/components/loading.ejs';
 import { carouselRender } from '../utils';
 
-function getRefreshWidget(ref) {
+function getRefreshWidget(menu) {
   // Requesting new widget from API based on a new reference.
   return new Promise((resolve, reject) => {
     ajax({
-      url: ref.getRecommendationsUrl,
+      url: menu.url,
       success: resolve,
       error: reject,
     });
@@ -39,15 +39,13 @@ function listenClicks(widgetId, product) {
   });
 }
 
-function isViewed(widget) {
+function isViewed(widget, selectedMenu) {
   /**
-   * If widget is configured to have references, its id keeps the
-   * same and the selected reference id changes.
+   * Widget id stays the same and the selected menu label changes.
    * Need to append to the tracked arrays this tuple
-   * because when reference changes you need to call another impression.
+   * because when the selected menu changes you need to call another impression.
    */
-  const refs = widget.displays[0].references;
-  const tuple = `${widget.id}-${refs[0].id}`;
+  const tuple = `${widget.id}-${selectedMenu.label}`;
   // Check if widget is in Viewport and it was not viewed before.
   if (isInViewport(document.getElementById(widget.id))
     && global.impressionWidget.indexOf(tuple) === -1) {
@@ -58,36 +56,34 @@ function isViewed(widget) {
   }
 }
 
-function listenImpression(widget, reload) {
+function listenImpression(widget, selectedMenu, reload) {
   if (reload === true) {
-    isViewed(widget);
+    isViewed(widget, selectedMenu);
   }
   /**
    * Each time the user scrolls the page is checked
    * if there is any widget on his Viewport.
    */
-  $(window).scroll(() => isViewed(widget));
+  $(window).scroll(() => isViewed(widget, selectedMenu));
 }
 
-export const HistoryWidget = {
-  async refreshWidget(widget, index, callback) {
-    const refs = widget.displays[0].references;
+export const PushWidget = {
+  async refreshWidget(widget, menu, callback) {
     const widgetDiv = $(`#${widget.id}`);
-    const productsDiv = widgetDiv.find('.owl-carousel');
 
-    // Remove product carousel and add loading animation.
-    productsDiv.trigger('destroy.owl.carousel').removeClass('owl-carousel owl-loaded');
-    productsDiv.find('.owl-stage-outer').children().unwrap();
-    productsDiv.empty();
-    productsDiv.addClass('owl-carousel');
+    // Remove product carousel, the reference card and add loading animation.
+    widgetDiv.trigger('destroy.owl.carousel').removeClass('owl-carousel owl-loaded');
+    widgetDiv.find('.owl-stage-outer').children().unwrap();
+    widgetDiv.empty();
+    widgetDiv.addClass('owl-carousel');
 
-    productsDiv.append(ejs.render(templateLoading));
+    widgetDiv.append(ejs.render(templateLoading));
 
     // Get the new refreshed widget.
-    const refreshedWidget = await getRefreshWidget(refs[index]);
+    const refreshedWidget = await getRefreshWidget(menu);
 
-    productsDiv.empty();
-    productsDiv.append(ejs.render(templateProducts, { widget: refreshedWidget }));
+    widgetDiv.empty();
+    widgetDiv.append(ejs.render(templateProducts, { widget: refreshedWidget }));
     // Rendering carousels with callback render after response.
     callback();
     // Set the tracking events to the new widget.
@@ -95,32 +91,38 @@ export const HistoryWidget = {
   },
 
   listenRefresh(widget) {
-    const refs = widget.displays[0].references;
-    const highlight = 'border border-primary';
-    const highlightClass = '.references-card';
-    const referencesCards = $(`#${widget.id}`).find(highlightClass);
+    const widgetLabels = $(`#${widget.id}-labels`).find('.menu-labels');
+    const highlight = 'menu-highlight';
+    const menuArray = widget.displays[0].menu;
 
-    referencesCards.mousedown(function () {
-      // Remove highlight from siblings.
-      referencesCards.parent()
-        .parent()
-        .siblings()
-        .find(highlightClass)
-        .removeClass(highlight);
-      // For each reference in carousel listen the refresh.
-      Object.keys(refs).forEach((index) => {
-        if ($(this).attr('id').replace(/ref-/, '') === refs[index].id) {
-          HistoryWidget.refreshWidget(widget, index, carouselRender);
-        }
-      });
+    widgetLabels.mousedown(function onLabelSelect() {
       // Add highlight to the selected.
       $(this).addClass(highlight);
+      // Remove highlight from siblings.
+      $(this).siblings().removeClass(highlight);
+      // For each menu listen the refresh.
+      Object.keys(menuArray).forEach((index) => {
+        // The menus are identified with their unique campaignIds.
+        if ($(this).attr('id') === menuArray[index].campaignId) {
+          // The refresh will be applyed based on the selected menu.
+          PushWidget.refreshWidget(widget, menuArray[index], carouselRender);
+        }
+      });
     });
   },
 
   listenEvents(widget, reload) {
+    const menus = widget.displays[0].menu;
+    let selectedMenu;
+
+    Object.keys(menus).forEach((index) => {
+      if (menus[index].selected) {
+        selectedMenu = menus[index];
+      }
+    });
+
     // Set the Widget Impression track listening.
-    listenImpression(widget, reload);
+    listenImpression(widget, selectedMenu, reload);
     // For each product set the Click track listening.
     const recs = widget.displays[0].recommendations;
     Object.keys(recs).forEach(indexRec => listenClicks(widget.id, recs[indexRec]));
@@ -128,21 +130,21 @@ export const HistoryWidget = {
 
   // Get the html to append in page.
   getHtml(widget) {
-    return ejs.render(templateHistoryWidget, { widget });
+    return ejs.render(templatePushWidget, { widget });
   },
 
   render(widget, field) {
-    const refsSize = widget.displays[0].references.length;
-    // Check if the History widget is configured with references.
-    if (refsSize > 0) {
+    const menus = widget.displays[0].menu;
+    // Check if the Push widget is configured with menu.
+    if (menus) {
       // Injecting html of the widget
       $(`.${field}`).append(this.getHtml(widget));
       // Set the tracking of events.
       this.listenEvents(widget);
-      // Set the listening to refresh on widget based on selected reference.
+      // Set the listening to refresh on widget based on selected menu.
       this.listenRefresh(widget);
     } else {
-      // If there are no references carousel render as a default widget.
+      // If there is no menu is rendered as a default widget.
       Widget.render(widget, field);
     }
   },

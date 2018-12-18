@@ -38,7 +38,7 @@ export function carouselRender() {
       $(element).owlCarousel({
         items: quantity,
         slideBy: quantity,
-        loop: true,
+        loop: false,
         dots: false,
         lazyLoad: true,
         nav: true,
