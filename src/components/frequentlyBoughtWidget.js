@@ -1,14 +1,60 @@
 import ejs from 'ejs/ejs';
-// import {
-//   setCookie,
-//   getCookie,
-//   deleteCookie,
-//   isInViewport,
-// } from '@linx-impulse/commons-js/browser';
-// import { ajax } from '@linx-impulse/commons-js/http/ajax';
+import {
+  setCookie,
+  getCookie,
+  isInViewport,
+} from '@linx-impulse/commons-js/browser';
+import { ajax } from '@linx-impulse/commons-js/http/ajax';
 import templateFrequentlyBoughtWidget from '../../layout/templates/frequentlyBoughtWidget.ejs';
 import templateFbtCard from '../../layout/templates/components/fbtCard.ejs';
 import templateFbtControls from '../../layout/templates/components/fbtControls.ejs';
+
+function listenClicks(widgetId, product) {
+  $(`#${product.id}-${widgetId}`).mousedown(() => {
+    console.log('clicked on ', product);
+    /**
+     * If product is clicked append on the cookie the trackUrl.
+     * Remember to make the requests when page load in the next access.
+     */
+    const cookie = getCookie(global.cookieProductUrls);
+    let arr = [];
+
+    if (cookie) {
+      arr = JSON.parse(cookie);
+    }
+    arr.push(product.trackingUrl);
+    setCookie(global.cookieProductUrls, JSON.stringify(arr));
+  });
+}
+
+function isViewed(widget) {
+  /**
+   * Widget id keeps the same and reference id changes.
+   * Need to append to the tracked arrays this tuple
+   * because when reference changes you need to call another impression.
+   */
+  const reference = widget.displays[0].references[0];
+  const tuple = `${widget.id} ${reference.id}`;
+  // Check if widget is in Viewport and it was not viewed before.
+  if (isInViewport(document.getElementById(widget.id))
+    && global.impressionWidget.indexOf(tuple) === -1) {
+    // Push to impressions trackeds to declare that the widget was viewed.
+    global.impressionWidget.push(tuple);
+    // Ajax request to add the impression track to the API.
+    ajax({ url: widget.impressionUrl });
+  }
+}
+
+function listenImpression(widget, reload) {
+  if (reload === true) {
+    isViewed(widget);
+  }
+  /**
+   * Each time the user scrolls the page is checked
+   * if there is any widget on his Viewport.
+   */
+  $(window).scroll(() => isViewed(widget));
+}
 
 function getIndexProduct(recs, productId) {
   let product;
@@ -49,7 +95,6 @@ export const FrequentlyBoughtWidget = {
     }
     priceDisplayed = priceDisplayed.toFixed(2);
     summary.children('.price-fbt').text(priceDisplayed);
-    console.log('update price');
   },
 
   updateCount(summary, cardsDisplayed) {
@@ -80,6 +125,7 @@ export const FrequentlyBoughtWidget = {
 
     cardsDisplayed = getCards(widget, card, siblingCard);
     this.updatePrice(summary, cardsDisplayed);
+    listenClicks(widget.id, cardsDisplayed.selected.product.details);
   },
 
   removeCard(widget, card, siblingCard, offset, summary) {
@@ -128,6 +174,17 @@ export const FrequentlyBoughtWidget = {
     }
   },
 
+  listenEvents(widget) {
+    // Set the Widget Impression track listening.
+    listenImpression(widget);
+    // Listen click on reference.
+    listenClicks(widget.id, widget.displays[0].references[0]);
+    // Listen click on recommendations.
+    for (let index = 0; index < 2; index += 1) {
+      listenClicks(widget.id, widget.displays[0].recommendations[index]);
+    }
+  },
+
   // Get the html to append in page.
   getHtml(widget) {
     return ejs.render(templateFrequentlyBoughtWidget, { widget });
@@ -139,5 +196,7 @@ export const FrequentlyBoughtWidget = {
     // Listen changes on FBT controls.
     this.listenChange(widget, 1);
     this.listenChange(widget, 2);
+    // Set the listening of refresh reference and widget.
+    this.listenEvents(widget);
   },
 };
