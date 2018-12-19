@@ -11,7 +11,6 @@ import templateFbtControls from '../../layout/templates/components/fbtControls.e
 
 function listenClicks(widgetId, product) {
   $(`#${product.id}-${widgetId}`).mousedown(() => {
-    console.log('clicked on ', product);
     /**
      * If product is clicked append on the cookie the trackUrl.
      * Remember to make the requests when page load in the next access.

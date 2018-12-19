@@ -112,10 +112,15 @@ global.formatUrl = (url) => {
 export function urlParams() {
   const url = window.location.href;
   const params = parse(url.split('?')[1]);
+  let formattedKey;
+
   if (Object.keys(params).length === 0) {
     return false;
   }
-  Object.keys(params).forEach(key => $(`#${key}`).val(params[key]));
+  Object.keys(params).forEach((key) => {
+    formattedKey = key.replace(/\[\]/, '');
+    $(`#${formattedKey}`).val(params[key]);
+  });
   return true;
 }
 

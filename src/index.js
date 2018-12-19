@@ -73,24 +73,42 @@ async function applyEventRequestApi(callback) {
    * Requesting response from API based on the passed parameters.
    * You may fill the parameters based on your info.
    */
+  const labels = [
+    'apiKey',
+    'secretKey',
+    'name',
+    'source',
+    'deviceId',
+    'productId',
+    'categoryId',
+    'tagId',
+    'url',
+    'userId',
+    'productFormat',
+    'salesChannel',
+    'dummy',
+    'homologation',
+    'showOnlyAvailable',
+  ];
+  const multipleLabels = [
+    'categoryId',
+    'tagId',
+    'productId',
+  ];
+  const boolLabels = [
+    'dummy',
+    'homologation',
+    'showOnlyAvailable',
+  ];
   try {
-    const labels = ['apiKey',
-      'secretKey',
-      'name',
-      'source',
-      'deviceId',
-      'productId',
-      'url',
-      'userId',
-      'productFormat',
-      'salesChannel',
-      'dummy',
-      'homologation',
-      'showOnlyAvailable',
-      'acceptEnconding',
-    ];
     const inputs = labels.reduce((obj, key) => {
-      obj[key] = $(`#${key}`).val();
+      if (multipleLabels.indexOf(key) !== -1) {
+        obj[key] = $(`#${key}`).val().split(',');
+      } else if (boolLabels.indexOf(key) !== -1) {
+        obj[key] = $(`#${key}`).val() === 'true';
+      } else {
+        obj[key] = $(`#${key}`).val();
+      }
       return obj;
     }, {});
     const response = await PageClient.getRecommendations(inputs);
