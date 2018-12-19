@@ -9,9 +9,9 @@
     reference = refs[index];
     imageUrl = formatUrl(reference.images.default);
     referenceUrl = formatUrl(reference.url);
-    borderClass = (index == 0) ? 'border border-primary' : '';
+    borderClass = (index == 0) ? 'border-primary' : '';
 %>
-    <div id="ref-<%= reference.id %>" class="references-card rounded <%= borderClass %>">
+    <div id="ref-<%= reference.id %>" class="references-card rounded border border-hide <%= borderClass %>">
       <div class="img-smaller float-left w-25 py-2">
         <img src="<%= imageUrl %>" class="rounded">
       </div>

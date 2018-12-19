@@ -76,10 +76,11 @@ export const HistoryWidget = {
     const productsDiv = widgetDiv.find('.owl-carousel');
 
     // Remove product carousel and add loading animation.
-    productsDiv.trigger('destroy.owl.carousel').removeClass('owl-carousel owl-loaded');
+    productsDiv.trigger('destroy.owl.carousel').removeClass('owl-carousel owl-loaded d-block');
     productsDiv.find('.owl-stage-outer').children().unwrap();
     productsDiv.empty();
     productsDiv.addClass('owl-carousel');
+    productsDiv.addClass('d-block');
 
     productsDiv.append(ejs.render(templateLoading));
 
@@ -96,7 +97,7 @@ export const HistoryWidget = {
 
   listenRefresh(widget) {
     const refs = widget.displays[0].references;
-    const highlight = 'border border-primary';
+    const highlight = 'border-primary';
     const highlightClass = '.references-card';
     const referencesCards = $(`#${widget.id}`).find(highlightClass);
 

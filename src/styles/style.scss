@@ -8,16 +8,40 @@ $linx-color: #682c69;
   color: $linx-color;
 }
 
+#container-demo {
+  opacity: 0;
+}
+
 #container-demo .container {
   clear: both;
 }
 
 .container-widget {
-  height: 20em;
+  display: flex;  
+  justify-content: space-between;
 }
 
 button:focus {
   outline: none;
+}
+
+.reference-card, .owl-carousel {
+  height: 20em;
+}
+
+.abled {
+  opacity: 1;
+  transition: all 0.8s ease;
+}
+
+.disabled {
+  opacity: 0.25;
+  transition: opacity 0.8s ease;
+}
+
+.disabled:hover {
+  text-decoration: none;
+  cursor: default;
 }
 
 .btn-refresh {
@@ -32,6 +56,7 @@ button:focus {
   z-index: 1;
   cursor: pointer;
   transform: scale(1.1);
+  transition: all 0.5s ease;
 }
 
 .btn-refresh:hover {
@@ -55,12 +80,14 @@ button:focus {
   cursor: pointer;
   width: 1.8em;
   height: 1.8em;
+  text-decoration: none; 
+  transition: all 0.5s ease;
 }
 
 .owl-theme .owl-nav [class*='owl-']:hover {
   background: $linx-color;
   color: #FFF;
-  text-decoration: none; 
+  
 }
 
 .owl-prev {
@@ -71,9 +98,8 @@ button:focus {
   right: 0.5em;
 }
 
-.owl-carousel {
-  display: block;
-  overflow: hidden;
+.owl-carousel .owl-stage {
+  display: flex;
 }
 
 // Card
@@ -108,6 +134,45 @@ button:focus {
   box-sizing: content-box;
 }
 
+.card-fbt, .fbt-summary {
+  width: 20%;
+  position: relative;
+}
+
+.fbt-summary {
+  align-self: center;
+  text-align: center;
+}
+
+.operator-fbt {
+  align-self: center;
+  text-align: center;
+  width: 6.66%;
+  font-size: 2em;
+  color: $linx-color;
+}
+
+.fbt-controls {
+  height: 2em;
+  line-height: 2em;
+  margin: 0.7em auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.fbt-button {
+  cursor: pointer;
+  display: inline-block;
+  border-radius: 4px;
+  transition: all 0.5s ease;
+}
+
+.fbt-button:hover {
+  background: $linx-color;
+  color: #FFF;
+}
+
 // vertical carousel
 .slick-vertical {
   overflow: hidden;
@@ -134,6 +199,7 @@ button:focus {
   text-align: center;
   cursor: pointer;
   color: #444;
+  transition: all 0.5s ease;
 }
 
 .slick-arrow:hover {
@@ -142,11 +208,11 @@ button:focus {
 }
 
 .slick-next {
-  bottom: 1em;
+  bottom: 0.2em;
 }
 
 .slick-prev {
-  top: 1em;
+  top: 0.2em;
 }
 
 .references-card:hover {

@@ -79,7 +79,9 @@ export const ReferenceWidget = {
     productsDiv.find('.owl-stage-outer').children().unwrap();
     productsDiv.empty();
     productsDiv.addClass('owl-carousel');
+    productsDiv.addClass('d-block');
     referenceDiv.children('a').remove();
+    widgetDiv.find('button').css('display', 'none');
 
     referenceDiv.append(ejs.render(templateLoading));
     productsDiv.append(ejs.render(templateLoading));
@@ -87,16 +89,25 @@ export const ReferenceWidget = {
     // Get the new refreshed widget.
     const refreshedWidget = await getRefreshWidget(widget);
 
-    referenceDiv.children('div').remove();
-    referenceDiv.append(ejs.render(templateReference, { widget: refreshedWidget }));
-    productsDiv.empty();
-    productsDiv.append(ejs.render(templateProducts, { widget: refreshedWidget }));
+    if (!$.isEmptyObject(refreshedWidget)) {
+      console.log(refreshedWidget);
+      referenceDiv.children('div').remove();
+      referenceDiv.append(ejs.render(templateReference, { widget: refreshedWidget }));
+      productsDiv.empty();
+      productsDiv.append(ejs.render(templateProducts, { widget: refreshedWidget }));
+      // Set the listen to track new refreshes in widget.
+      this.listenRefresh(refreshedWidget);
+      // Set the tracking events to the new widget.
+      this.listenEvents(refreshedWidget, true);
+    } else {
+      referenceDiv.children('div').remove();
+      referenceDiv.append(ejs.render(templateReference, { widget }));
+      productsDiv.empty();
+      productsDiv.append(ejs.render(templateProducts, { widget }));
+    }
+    widgetDiv.find('button').css('display', 'inline-block');
     // Rendering carousels with callback render after response.
     callback();
-    // Set the listen to track new refreshes in widget.
-    this.listenRefresh(refreshedWidget);
-    // Set the tracking events to the new widget.
-    this.listenEvents(refreshedWidget, true);
   },
 
   listenRefresh(widget) {

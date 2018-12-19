@@ -15,6 +15,7 @@ import { Widget } from './components/widget';
 import { ReferenceWidget } from './components/referenceWidget';
 import { HistoryWidget } from './components/historyWidget';
 import { PushWidget } from './components/pushWidget';
+import { FrequentlyBoughtWidget } from './components/frequentlyBoughtWidget';
 import './styles/style.scss';
 
 function renderWidget(widget, field) {
@@ -26,7 +27,9 @@ function renderWidget(widget, field) {
     'Wishlist',
   ];
   // Checking witch type of widget to render
-  if (widget.feature === 'HistoryPersonalized') {
+  if (widget.feature === 'FrequentlyBoughtTogether') {
+    FrequentlyBoughtWidget.render(widget, field);
+  } else if (widget.feature === 'HistoryPersonalized') {
     HistoryWidget.render(widget, field);
   } else if (widget.feature === 'Push') {
     PushWidget.render(widget, field);
@@ -62,11 +65,10 @@ function renderPage(response) {
   jsonRender(response);
   // Unhiding the container with the slots and widgets.
   $(`#${config.html.demoContainer}`).removeClass('d-none');
+  $(`#${config.html.demoContainer}`).animate({ opacity: 1 }, 1200);
 }
 
 async function applyEventRequestApi(callback) {
-  // Hiding the container with the slots and widgets.
-  $(`#${config.html.demoContainer}`).addClass('d-none');
   /**
    * Requesting response from API based on the passed parameters.
    * You may fill the parameters based on your info.
