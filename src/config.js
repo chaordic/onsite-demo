@@ -7,4 +7,22 @@ export default {
     demoContainer: 'container-demo',
     jsonContainer: 'container-json',
   },
+  responseType: [
+    'onlyIds',
+    'compact',
+    'complete',
+  ],
+  pageType: [
+    'home',
+    'product',
+    'category',
+    'subcategory',
+    'cart',
+    'confirmation',
+    'userprofile',
+    'not_found',
+    'search',
+    'landing_page',
+    'other',
+  ],
 };

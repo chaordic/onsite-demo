@@ -90,7 +90,6 @@ export const ReferenceWidget = {
     const refreshedWidget = await getRefreshWidget(widget);
 
     if (!$.isEmptyObject(refreshedWidget)) {
-      console.log(refreshedWidget);
       referenceDiv.children('div').remove();
       referenceDiv.append(ejs.render(templateReference, { widget: refreshedWidget }));
       productsDiv.empty();
