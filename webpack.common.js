@@ -28,7 +28,9 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        exclude: /node_modules/,
+        exclude: function(modPath) {
+          return /node_modules/.test(modPath) && !/node_modules\/engage-onsite-sdk-js/.test(modPath);
+        },
         use: ['babel-loader', 'eslint-loader'],
       },
       {
