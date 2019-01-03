@@ -27,7 +27,8 @@
   "homepage": "https://github.com/chaordic/onsite-demo#readme",
   "dependencies": {
     "@linx-impulse/commons-js": "^3.4.0",
-    "ejs": "^2.6.1"
+    "ejs": "^2.6.1",
+    "engage-onsite-sdk-js": "git+ssh://git@github.com:chaordic/engage-onsite-sdk-js.git#feat/pages-recommendations"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",

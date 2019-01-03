@@ -1,9 +1,9 @@
+import { getPageRecommendations } from 'engage-onsite-sdk-js';
 import {
   setCookie,
   getCookie,
 } from '@linx-impulse/commons-js/browser';
 import { stringify } from '@linx-impulse/commons-js/query-string';
-import { PageClient } from './recommendations';
 import config from './config';
 import {
   carouselRender,
@@ -111,7 +111,7 @@ async function applyEventRequestApi(callback) {
       }
       return obj;
     }, {});
-    const response = await PageClient.getRecommendations(inputs);
+    const response = await getPageRecommendations(inputs);
     if (getCookie('pageRendered') !== 'true') {
       // Rendering slots and widgets from the response.
       renderPage(response);
