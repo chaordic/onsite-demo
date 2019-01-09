@@ -1,0 +1,16 @@
+version: "3.1"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: onsite-demo
+    ports:
+      - 9000:9000
+    volumes:
+      - .:/usr/src/app
+      - $SSH_AUTH_SOCK:/tmp/ssh_auth.sock
+    environment:
+      - SSH_AUTH_SOCK=/tmp/ssh_auth.sock    
+    command: npm start
