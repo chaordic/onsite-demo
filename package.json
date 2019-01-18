@@ -28,7 +28,8 @@
   "dependencies": {
     "@linx-impulse/commons-js": "^3.4.0",
     "ejs": "^2.6.1",
-    "engage-onsite-sdk-js": "git+ssh://git@github.com:chaordic/engage-onsite-sdk-js.git#v0.0.0"
+    "engage-onsite-sdk-js": "git+ssh://git@github.com:chaordic/engage-onsite-sdk-js.git#v0.0.0",
+    "engage-wishlist-sdk-js": "git+ssh://git@github.com/chaordic/engage-wishlist-sdk-js.git#beginning"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",

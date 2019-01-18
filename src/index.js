@@ -1,4 +1,5 @@
 import { getPageRecommendations } from 'engage-onsite-sdk-js';
+import { Api } from 'engage-wishlist-sdk-js';
 import {
   setCookie,
   getCookie,
@@ -17,6 +18,58 @@ import { HistoryWidget } from './components/historyWidget';
 import { PushWidget } from './components/pushWidget';
 import { FrequentlyBoughtWidget } from './components/frequentlyBoughtWidget';
 import './styles/style.scss';
+
+async function getLikes(options) {
+  const lists = await Api.getAllLists(options);
+
+  let listId;
+  for (let i = 0; i < lists.length && !listId; i++) {
+    if (lists[i].def) {
+      listId = lists[i].id;
+    }
+  }
+
+  const likes = await Api.getList({ ...options, listId });
+  return likes;
+}
+
+async function renderWishlist(options) {
+  const likes = await getLikes(options);
+
+  $('like-button').each(function () {
+    const itemId = $(this).attr('data-product-id');
+
+    let liked = false;
+    for (let i = 0; i < likes.list.items.length; i++) {
+      if (itemId === likes.list.items[i].id) {
+        liked = true;
+      }
+    }
+
+    const btn = document.createElement('button');
+    btn.textContent = liked ? 'Remove' : 'Add';
+
+    btn.onmousedown = () => {
+      if (liked) {
+        Api.removeItemFromList({ listId: likes.list.id, itemId, ...options }).then(() => {
+          liked = false;
+          btn.textContent = 'Add';
+        }, (err) => {
+          console.error(err);
+        });
+      } else {
+        Api.insertItemOnList({ listId: likes.list.id, itemId, ...options }).then(() => {
+          liked = true;
+          btn.textContent = 'Remove';
+        }, (err) => {
+          console.error(err);
+        });
+      }
+    };
+
+    $(this).append(btn);
+  });
+}
 
 function renderWidget(widget, field) {
   const referenceWidgets = [
@@ -112,9 +165,19 @@ async function applyEventRequestApi(callback) {
       return obj;
     }, {});
     const response = await getPageRecommendations(inputs);
+
+    const storeConfig = {
+      apiKey: inputs.apiKey,
+      secretKey: inputs.secretKey,
+    };
+
+    global.wishlist.config = { ...global.wishlist.config, ...storeConfig };
+
     if (getCookie('pageRendered') !== 'true') {
       // Rendering slots and widgets from the response.
       renderPage(response);
+      // Wishlist
+      renderWishlist(global.wishlist.config);
       // Rendering carousels with callback render after response.
       callback();
       // Demo toggle autoplay.
@@ -155,5 +218,7 @@ const demoApp = {
     listenEventRequestApi();
   },
 };
+
+global.wishlist = { config: { userId: 'demo999', itemType: 'product' } };
 
 demoApp.init();

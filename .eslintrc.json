@@ -6,6 +6,8 @@
     "jquery": true
   },
   "rules": {
+    "prefer-destructuring": "off",
+    "no-plusplus": "off",
     "func-names": "off",
     "no-console": "off",
     "no-param-reassign": ["error", { "props": false }],
